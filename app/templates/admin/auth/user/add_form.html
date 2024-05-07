@@ -1,0 +1,44 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/admin_custom.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="submit-row">
+    <form id="user_form" method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <fieldset class="module">
+            <table>
+                <tr>
+                    <td><label for="id_username">Username:</label></td>
+                    <td><input type="text" id="id_username" name="username" value="{{ form.username.value }}"></td>
+                    <td>{% for error in form.username.errors %}<span class="error">{{ error }}</span>{% endfor %}</td>
+                </tr>
+                <tr>
+                    <td><label for="id_role">Role:</label></td>
+                    <td><input type="text" id="id_role" name="role" value="{{ form.role.value }}"></td>
+                    <td>{% for error in form.role.errors %}<span class="error">{{ error }}</span>{% endfor %}</td>
+                </tr>
+                <tr>
+                    <td><label for="id_password1">Password:</label></td>
+                    <td><input type="password" id="id_password1" name="password1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><label for="id_password2">Verify password:</label></td>
+                    <td><input type="password" id="id_password2" name="password2"></td>
+                    <td></td>
+                </tr>
+            </table>
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" value="Save" class="btn btn-primary" name="_save" />
+            <input type="submit" value="Save and Add Another" class="btn btn-secondary" name="_addanother" />
+            <input type="submit" value="Save and Continue Editing" class="btn btn-secondary" name="_continue" />
+        </div>
+    </form>
+</div>
+{% endblock %}

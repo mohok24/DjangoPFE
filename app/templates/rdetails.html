@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%static 'rep-prof.css' %}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Radiology Report Platform</h2>
+            <ul>
+                <li class="ispressed">Report</li>
+                <li><a href="{% url 'patients' %}">Patients</a></li>
+                <li><a href="#">Statistics</a></li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="{% url 'reports' %}">Reports</a></li>
+                    <li>> repN{{report.id}}</li>
+                </ul>
+                <img src="image.png" alt="" class="prf-pic">
+            </div>
+            <div class="page">
+                <div class="inf-2">
+                    <h1>Report Details</h1>
+
+                    <h3>Report ID: repN{{report.id}}</h3>
+
+                    <p class="title">Date: {{ report.date }}</p>
+                    <p class="title">Type: {{ report.type }}</p>
+                    <p class="title">Indication: {{ report.indication }}</p>
+
+
+                    <h3>Echocardiogram Information</h3>
+                    <div>
+                        <p class="title">Left: </p><p>{{ report.leftE }}</p>
+                        <p class="title">Right: </p><p>{{ report.rightE }}</p>
+                        <p class="title">Both: </p><p>{{ report.bothE }}</p>
+                    </div>
+
+                    <h3>Classification Information</h3>
+                    <div>
+                        <p class="title">Left: </p><p>{{ report.leftclassification }}</p>
+                        <p class="title">Right: </p><p>{{ report.rightclassification }}</p>
+                        <p class="title">Both: </p><p>{{ report.bothclassification }}</p>
+                    </div>
+                    <h2>Conclusion</h2>
+                    <div>
+
+                        <p>{{ report.conclusion }}</p>
+                    </div>
+                    <h2>Recommendations</h2>
+                    <div>
+
+                        <p>{{ report.recommendations }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

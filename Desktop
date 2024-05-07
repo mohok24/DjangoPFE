@@ -1,0 +1,7 @@
+Watching for file changes with StatReloader
+Not Found: /ws/send-message/
+"GET /ws/send-message/ HTTP/1.1" 404 3828
+"GET /send-message/ HTTP/1.1" 200 1924
+Not Found: /ws/send-message/
+"GET /ws/send-message/ HTTP/1.1" 404 3828
+C:\Users\min\Downloads\pfe-main\realwebapp\DjangoWebProject1\DjangoWebProject1\DjangoWebProject1\settings.py changed, reloading.

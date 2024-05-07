@@ -1,0 +1,190 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% load static %}
+        <link rel="stylesheet" href="{%static 'patient-prof.css' %}">
+        <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
+        <title>Document</title>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="sidebar">
+                <h2>Radiology Report Platform</h2>
+                <ul>
+                    <li><a href="{% url 'reports' %}">Report</a></li>
+                    <li class="ispressed">Patients</li>
+                    <li><a href="#">Statistics</a></li>
+                </ul>
+            </div>
+            <div class="main_content">
+                <div class="header">
+                    <ul class="dir-link">
+                        <li><a href="{% url 'patients' %}">Patients</a></li>
+                        <li>> patN°{{patient.id}}</li>
+                    </ul>
+                    <img src="image.png" alt="" class="prf-pic">
+                </div>
+                <div class="page">
+                    <div class="pat-info">
+                        <div class="inf-1">
+                            <img src="image.png" alt="" class="img-pat">
+                            <h2 class="pat-name"></h2>
+                        </div>
+                        <div class="inf-2">
+                            <ul class="tabs">
+                                <li id="history-tab" class="tab">History</li>
+                                <li id="patient-data-tab" class="tab">Patient Data</li>
+                            </ul>
+                        </div>
+                        <div id="patient-data-section" class="section">
+                            <ul>
+                                <li>Name: {{patient.firstname}} {{patient.lastname}}</li>
+                                <li>Age:{{patient.age}}</li>
+                                <li>Number of reports: {{patient.num_reports}}</li>
+                                <li>Latest report: {{date}}</li>
+                                <li>
+                                    Reports:
+                                    <ul>
+                                        {% for report in reports %}
+                                        <li>
+                                            Report ID: {{ report.id }}, Radiologist:
+                                            <a href="{% url 'profile' report.user.id %}">{{ report.user.username }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                        <div id="history-section" class="section">
+                            <div class="inf-graph" id="plot-container">
+                                <script>
+                                    function handlePointClick(data) {
+
+                                        var pointData = data.points[0];
+                                        var xValue = pointData.x;
+                                        var yValue = pointData.y;
+                                        var label = pointData.text;
+
+                                        window.location.href = '/page?x=' + xValue + '&y=' + yValue + '&label=' + label;
+                                    }
+                                </script>
+                                <script>
+        var reports = [
+        {% for report in reports %}
+        { id: {{ report.id }} },
+        {% endfor %}
+];
+
+        var x_values = {{ x_values|safe }};
+        var y_values = {{ y_values|safe }};
+
+
+        var filtered_y_values = y_values.map(function(entry) {
+            return entry.map(function(value) {
+                return value === -1 ? null : value;
+            });
+        });
+
+        // Extracting filtered y-axis values
+        var filtered_right_values = filtered_y_values.map(function(entry) { return entry[0]; });
+        var filtered_left_values = filtered_y_values.map(function(entry) { return entry[1]; });
+        var filtered_both_values = filtered_y_values.map(function(entry) { return entry[2]; });
+
+        // Create traces for each y-axis value
+        var trace_right = {
+            x: x_values,
+            y: filtered_right_values,
+            mode: 'markers',
+            marker: {
+                size: 10,
+                color: 'blue'
+            },
+            name: 'Right'  // Name of the trace for the legend
+        };
+
+        var trace_left = {
+            x: x_values,
+            y: filtered_left_values,
+            mode: 'markers',
+            marker: {
+                size: 10,
+                color: 'red'
+            },
+            name: 'Left'  // Name of the trace for the legend
+        };
+
+        var trace_both = {
+            x: x_values,
+            y: filtered_both_values,
+            mode: 'markers',
+            marker: {
+                size: 10,
+                color: 'green'
+            },
+            name: 'Both'  // Name of the trace for the legend
+        };
+
+        // Define layout
+        var layout = {
+            title: 'Plot',
+            xaxis: {
+                title: 'Date',
+                type: 'date'
+            },
+            yaxis: {
+                title: 'BI-RADS level',
+                range: [0, 7]
+            }
+        };
+
+            Plotly.newPlot('plot-container', [trace_right, trace_left, trace_both], layout).then(function (plot) {
+                // Add event listener to plot points
+                document.getElementById('plot-container').on('plotly_click', function (data) {
+                    // Extract the data point clicked
+                    var point = data.points[0];
+                    // Extract the ID of the report corresponding to the clicked point
+                    var reportId = reports[point.pointNumber].id;
+                    // Redirect to the respective report URL
+                    window.location.href = '/reports/rdetails/' + reportId; // Replace '/reports/' with the actual URL pattern
+                });
+            });
+
+
+
+                                </script>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+    </body>
+</html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var historyTab = document.getElementById("history-tab");
+        var patientDataTab = document.getElementById("patient-data-tab");
+        var historySection = document.getElementById("history-section");
+        var patientDataSection = document.getElementById("patient-data-section");
+
+        // Show history section and hide patient data section by default
+        historySection.style.display = "flex";
+        patientDataSection.style.display = "none";
+
+        // Add event listeners to tabs
+        historyTab.addEventListener("click", function () {
+            historySection.style.display = "flex";
+            patientDataSection.style.display = "none";
+        });
+
+        patientDataTab.addEventListener("click", function () {
+            historySection.style.display = "none";
+            patientDataSection.style.display = "flex";
+        });
+    });
+</script>

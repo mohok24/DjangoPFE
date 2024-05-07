@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{%static 'stat.css'%}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Statistics</h2>
+            <ul>
+                <li><a href="#">Report</a></li>
+                <li><a href="#">Patient</a></li>
+                <li class="ispressed">Statistics</li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="#">home_page</a></li>
+                    <li>> <a href="#">Statistics</a></li>
+                </ul>
+                <img src="image.png" alt="" class="prf-pic">
+            </div>
+            <div class="page">
+                <main class="main-container">
+                    <div class="main-title">
+                        <h2>DASHBOARD</h2>
+                    </div>
+
+                    <div class="main-cards">
+
+                        <!-- card 1 -->
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>Selected Time Range: {{ time_range_g1 }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="time_range_g1">Select time range:</label>
+                                <select name="time_range_g1" id="time_range_g1">
+                                    <option value="all_time">All Time</option>
+                                    <option value="past_week">Past Week</option>
+                                    <option value="past_month">Past Month</option>
+                                    <option value="past_year">Past Year</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+
+                            <div class="card-inner">
+                                <h3>Selceted Graph Type: {{ graph1_type }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="graph1_type">Select graph type:</label>
+                                <select name="graph1_type" id="graph1_type">
+                                    <option value="pie">pie chart</option>
+                                    <option value="hist">histogram</option>
+                                    <option value="scatt">scatter plot</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+
+                        </div>
+
+                        <!-- card 2 -->
+
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>the studied aria: {{ b_aria_g1 }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="b_aria_g1">celect aria:</label>
+                                <select name="b_aria_g1" id="b_aria_g1">
+                                    <option value="right">right</option>
+                                    <option value="left">left</option>
+                                    <option value="both">both</option>
+                                    <option value="all">all</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+
+                            <div class="card-inner">
+                                <h3>Average age of patients:</h3>
+                            </div>
+                            <h1>{% if avg_age %}{{ avg_age|floatformat:1 }}{% else %}N/A{% endif %}</h1>
+
+                        </div>
+
+                        <!--card 3-->
+
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>Selected Time Range: {{ time_range_g2 }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="time_range_g2">Select time range:</label>
+                                <select name="time_range_g2" id="time_range_g2">
+                                    <option value="all_time">All Time</option>
+                                    <option value="past_week">Past Week</option>
+                                    <option value="past_month">Past Month</option>
+                                    <option value="past_year">Past Year</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+
+                            <div class="card-inner">
+                                <h3>Selceted Graph Type: {{ graph2_type }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="graph2_type">Select graph type:</label>
+                                <select name="graph2_type" id="graph2_type">
+                                    <option value="pie">pie chart</option>
+                                    <option value="hist">histogram</option>
+                                    <option value="scatt">scatter plot</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+
+                        </div>
+
+                        <!-- card 4 -->
+
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>the studied aria: {{ b_aria_g2 }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="b_aria_g2">celect aria:</label>
+                                <select name="b_aria_g2" id="b_aria_g2">
+                                    <option value="right">right</option>
+                                    <option value="left">left</option>
+                                    <option value="both">both</option>
+                                    <option value="all">all</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+
+                            <div class="card-inner">
+                                <h3>Average age of patients:</h3>
+                            </div>
+                            <h1>{% if avg_age %}{{ avg_age|floatformat:1 }}{% else %}N/A{% endif %}</h1>
+
+                        </div>
+
+                    </div>
+
+                    <div class="charts">
+
+                        <div class="charts-card">
+                            <h2 class="chart-title">graph1</h2>
+                            <div id="bar-chart">
+                                <script>
+                              var graphType = document.getElementById("graph1_type").value;
+                              var timeRange = document.getElementById("time_range_g1").value;
+                              var b_aria = document.getElementById("b_aria_g1").value;
+                                                                  switch (b_aria) {
+                                        case 'right':
+                                            var y_values = [
+                                                {% for report in reports_g1 %}
+                                                    {{ report.rightclassification }},
+                                                {% endfor %}
+                                            ];
+                                            var g1 = per_plot(y_values, graph1_type);
+                                            Plotly.newPlot('plot-container', g1.data, g1.layout);
+                                            break;
+
+                                        case 'left':
+                                            var y_values = [
+                                                {% for report in reports_g1 %}
+                                                    {{ report.leftclassification }},
+                                                {% endfor %}
+                                            ];
+                                            var g1 = per_plot(y_values, graph1_type);
+                                            Plotly.newPlot('plot-container', g1.data, g1.layout);
+                                            break;
+
+                                        case 'both':
+                                            var y_values = [
+                                                {% for report in reports_g1 %}
+                                                    {{ report.bothclassification }},
+                                                {% endfor %}
+                                            ];
+                                            var g1 = per_plot(y_values, graph1_type);
+                                            Plotly.newPlot('plot-container', g1.data, g1.layout);
+                                            break;
+
+                                        case 'all':
+                                            var yr_values = [
+                                                {% for report in reports_g1 %}
+                                                    {{ report.rightclassification }},
+                                                {% endfor %}
+                                            ];
+                                            var yl_values = [
+                                                {% for report in reports_g1 %}
+                                                    {{ report.leftclassification }},
+                                                {% endfor %}
+                                            ];
+                                            var yb_values = [
+                                                {% for report in reports_g1 %}
+                                                    {{ report.bothclassification }},
+                                                {% endfor %}
+                                            ];
+                                            break;
+                                    }
+
+
+                                  var g1r=per_plot(yr_values,graph1_type);
+                                  var g1l=per_plot(yl_values,graph1_type);
+                                  var g1b=per_plot(yb_values,graph1_type);
+
+                                  var combinedData = g1r.data.concat(g1l.data, g1b.data);
+                                  var combinedLayout = Object.assign({}, g1r.layout);
+
+                                  Plotly.newPlot('plot-container', combinedData, combinedLayout);
+                                break;
+                              }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div class="charts-card">
+                            <h2 class="chart-title">graph2</h2>
+                            <div id="area-chart">
+                                <script>
+                                    //Plotly.newPlot('plot-container', data, layout);
+                                </script>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="main-cards">
+
+                        <!-- card1 -->
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>Selected Time Range: {{ time_range }}</h3>
+                            </div>
+
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <label for="time_range">Select time range:</label>
+                                <select name="time_range" id="time_range">
+                                    <option value="all_time">All Time</option>
+                                    <option value="past_week">Past Week</option>
+                                    <option value="past_month">Past Month</option>
+                                    <option value="past_year">Past Year</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
+
+                        <!-- card 2-->
+
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>Number of patients:</h3>
+                            </div>
+                            <h1>{{ num_patients }}</h1>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>Number of reports available:</h3>
+                            </div>
+                            <h1>{{ num_reports }}</h1>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-inner">
+                                <h3>Average age of patients:</h3>
+                            </div>
+                            <h1>{% if avg_age %}{{ avg_age|floatformat:1 }}{% else %}N/A{% endif %}</h1>
+                        </div>
+
+                    </div>
+
+                </main>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function per_plot(y_value, graphType) {
+            var countMap = {};
+            y_value.forEach(function (value) {
+                countMap[value] = (countMap[value] || 0) + 1;
+            });
+
+            var labels = Object.keys(countMap).sort();
+
+            var values = labels.map(function (label) {
+                return countMap[label];
+            });
+
+            if (graphType == 'pie') {
+                /*var countMap = {};
+                y_value.forEach(function(value) {
+                  countMap[value] = (countMap[value] || 0) + 1;
+                });
+
+                var labels = Object.keys(countMap).sort();
+
+                var values = labels.map(function(label) {
+                  return countMap[label];
+                });*/
+
+                var data = [{
+                    values: values,
+                    labels: labels,
+                    type: 'pie'
+                }];
+                var layout = {
+                    title: 'Pie Chart',
+                };
+            }
+
+            else if (graphType == 'hist') {
+                /*var countMap = {};
+                y_value.forEach(function(value) {
+                  countMap[value] = (countMap[value] || 0) + 1;
+                });
+
+                var labels = Object.keys(countMap).sort();
+
+                var values = labels.map(function(label) {
+                  return countMap[label];
+                });*/
+
+                var data = [{
+                    x: labels,
+                    y: values,
+                    type: 'bar'
+                }];
+                var layout = {
+                    title: 'Histogram',
+                    xaxis: { title: 'xaxis' },
+                    yaxis: { title: 'yasis' }
+                };
+            }
+
+            else if (graphType == 'scatt') {
+                var data = [{
+                    x: [],
+                    y: [],
+                    mode: 'markers',
+                    type: 'scatter'
+                }];
+                var layout = {
+                    title: 'Scatter Plot',
+                    xaxis: { title: 'X-axis' },
+                    yaxis: { title: 'Y-axis' }
+                };
+            }
+            return { data: data, layout: layout };
+        }
+    </script>
+
+</body>
+</html>

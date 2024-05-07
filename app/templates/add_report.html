@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>adding reports</title>
+    <style>
+       
+        .grayed-out {
+            color: #888; 
+        }
+
+        body div{
+            border: 2px solid #ccc;
+            padding: 5px;
+            min-height: 50px;
+            width: 300px;
+            outline: none;
+
+        }
+
+        #suggestedWord {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <form id="myForm" method="post">
+        {% csrf_token %}
+
+        {{report_form.as_p}}
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var typingTimer;
+        var doneTypingInterval = 3000;
+        var suggestedWordAdded = false;
+        $('div[contenteditable="true"]').on('input', function () {
+            clearTimeout(typingTimer);
+            var $div = $(this);
+            var text = $div.text().trim();
+
+            if (text && !(text.endsWith('.'))) {
+                typingTimer = setTimeout(function () {
+                    sendRequest($div);
+                }, doneTypingInterval);
+            } else {
+                removeSuggestedWord();
+            }
+        });
+
+        $('div[contenteditable="true"]').keydown(function (e) {
+            if (e.keyCode == 9) {
+                e.preventDefault();
+                var $div = $(this);
+                if ($div.find('#suggestedWord').length && !suggestedWordAdded) {
+                    var suggestedWord = $div.find('#suggestedWord').text();
+                    removeSuggestedWord($div);
+                    var text = $div.text();
+                    var cursorPosition = getCaretPosition(this);
+                    var newText = text.slice(0, cursorPosition) + suggestedWord + text.slice(cursorPosition);
+                    $div.text(newText);
+                    setCaretPosition(this, cursorPosition + suggestedWord.length);
+                    suggestedWordAdded = true;
+                }
+            }
+        });
+
+
+        function getCaretPosition(element) {
+            var selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                var range = selection.getRangeAt(0);
+                var preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
+                return preCaretRange.toString().length;
+            }
+            return 0;
+        }
+
+        function setCaretPosition(element, position) {
+            var range = document.createRange();
+            var selection = window.getSelection();
+            range.setStart(element.firstChild, position);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
+        function sendRequest($div) {
+            var inputValue = $div.text();
+            if (!$div.find('#suggestedWord').length) {
+                var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+                $.ajax({
+                    type: 'POST',
+                    headers: { 'X-CSRFToken': csrfToken },
+                    data: {
+                        'input_text': $div.text(),
+                        'csrfmiddlewaretoken': csrfToken
+                    },
+                    url: 'predict',
+                    success: function (response) {
+                        var suggestedWord = '<span id="suggestedWord" class="grayed-out"> ' + response.predicted_text + '</span>';
+                        $div.append(suggestedWord);
+                        suggestedWordAdded = false;
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX request failed:', status, error);
+                    }
+                });
+            }
+        }
+
+        function removeSuggestedWord($div) {
+            $div.find('#suggestedWord').remove();
+            suggestedWordAdded = false;
+        }
+    </script>
+
+</body>
+</html>
+    

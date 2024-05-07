@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'patient.css' %}">
+    <title>Messages</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Radiology Report Platform</h2>
+            <ul>
+                <li><a href="{% url 'reports' %}">Report</a></li>
+                <li><a href="{% url 'patients' %}">Patient</a></li>
+                <li><a href="#">Statistics</a></li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="#">Patients</a></li>
+                </ul>
+                <img src="image.png" alt="" class="prf-pic">
+            </div>
+            <div class="page">
+                <div class="box">
+                    <div class="message-detail">
+                        <h1>Send Message</h1>
+                        <form id="message-form" action="/send-message/" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

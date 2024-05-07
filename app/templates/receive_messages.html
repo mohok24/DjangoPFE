@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'patient.css' %}">
+    <title>Messages</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Radiology Report Platform</h2>
+            <ul>
+                <li><a href="{% url 'reports' %}">Report</a></li>
+                <li><a href="{% url 'patients' %}">Patient</a></li>
+                <li><a href="#">Statistics</a></li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="#">Messages</a></li>
+                </ul>
+                <img src="image.png" alt="" class="prf-pic">
+            </div>
+            <div class="page">
+                <div class="box">
+                    <div class="message-detail">
+                        <h1>Received Messages</h1>
+                        <button onclick="composeMessage()">
+                            Compose Message
+                        </button>
+                        <ul>
+                            {% for message in messages %}
+                            <li>
+                                <div id="message_{{ message.id }}">
+                                    <strong>From:</strong> {{ message.sender_username }}<br>
+                                    <strong>Subject:</strong> {{ message.subject }}<br>
+                                    <strong>Time:</strong> {{ message.timestamp }}<br>
+                                    {% if message.attachment %}
+                                    <strong>Attachment:</strong> <a href="{{ message.attachment.url }}">Download</a><br>
+                                    {% endif %}
+                                    <button onclick="deleteMessage({{ message.id }})">Delete</button>
+                                    <button onclick="replyMessage('{{ message.sender_username }}')">Reply</button>
+                                    <a href=/message/{{message.id}}>Show More</a>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
+
+<script>
+    function deleteMessage(messageId) {
+        if (confirm("Are you sure you want to delete this message?")) {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'delete_message' %}",
+                data: {
+                    'message_id': messageId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    $("#message_" + messageId).parent().remove();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    function replyMessage(senderUsername) {
+        var receiver = encodeURIComponent(senderUsername);
+        window.location.href = "/send-message/?receiver=" + receiver;
+    }
+
+    function composeMessage() {
+        window.location.href = "/send-message/";
+    }
+</script>
+</body>
+</html>

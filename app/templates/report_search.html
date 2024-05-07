@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Search Reports</h1>
+
+    <form method="get" id="report-search-form">
+        {% csrf_token %}
+
+        <div id="individual-fields">
+            <label> choose ur search method?</label>
+            <br />
+
+            <input type="radio" id="exact" name="dates" value="exact" checked>
+            <label for="exact">Exact date</label>
+            <input type="radio" id="range" name="dates" value="range">
+            <label for="range">Range</label><br />
+
+            <label for="date" id="base">Date:</label>
+            <input type="date" id="date" name="date">
+
+            <label for="from" id="fromla" style="display: none;">Date from:</label>
+            <input type="date" id="from_date" name="from_date" style="display: none;">
+
+            <label for="to" id="tola" style="display: none;">Date to:</label>
+            <input type="date" id="to_date" name="to_date" style="display: none;">
+            <br />
+            <label for="patient_id">Patient ID:</label>
+            <input type="text" id="patient_id" name="patient_id" />
+            <br />
+            <label for="type">Type:</label>
+            <input type="text" id="type" name="type">
+            <br />
+
+            <label for="indication">Indication:</label>
+            <input type="text" id="indication" name="indication">
+            <br />
+            <label for="leftM">Left M:</label>
+            <input type="text" id="leftM" name="leftM">
+            <br />
+            <label for="rightM">Right M:</label>
+            <input type="text" id="rightM" name="rightM">
+            <br />
+            <label for="bothM">Both M:</label>
+            <input type="text" id="bothM" name="bothM">
+            <br />
+            <label for="leftE">Left E:</label>
+            <input type="text" id="leftE" name="leftE">
+            <br />
+            <label for="rightE">Right E:</label>
+            <input type="text" id="rightE" name="rightE">
+            <br />
+            <label for="bothE">Both E:</label>
+            <input type="text" id="bothE" name="bothE">
+            <br />
+            <label for="classification">Classification:</label>
+            <input type="text" id="classification" name="classification">
+            <br />
+            <label for="conclusion">Conclusion:</label>
+            <input type="text" id="conclusion" name="conclusion">
+            <br />  
+            <label for="recommendations">Recommendations:</label>
+            <input type="text" id="recommendations" name="recommendations">
+        </div>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Search Results</h2>
+
+    {% for x in reports %}
+    <div class="list">
+        <div class="imgpat">
+            <img src="image.png">
+        </div>
+        <div class="pat-info">
+            <h2 class="seemore"><a href="{% url 'rdetails' id=x.id %}">see more</a></h2>
+            <h4>{{x.id}}</h4>
+            <p>Type: {{ x.type }}</p>
+            <p>Patient name:{{x.patient.firstname}} {{x.patient.lastname}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    </body>
+</html>
+
+<script>
+    const exact = document.getElementById("exact");
+    const range = document.getElementById("range");
+    const from = document.getElementById("from_date");
+    const to = document.getElementById("to_date");
+    const tola = document.getElementById("tola");
+    const fromla = document.getElementById("fromla");
+    const date = document.getElementById("date");
+    exact.addEventListener("change", function () {
+        if (exact.checked) {
+            date.style.display = "block";
+            fromla.style.display = "none";
+            tola.style.display = "none";
+            from.style.display = "none";
+            to.style.display = "none";
+            base.style.display = "block";
+        }
+    });
+    range.addEventListener("change", function () {
+        if (range.checked) {
+            to.style.display = "block";
+            tola.style.display = "block";
+            from.style.display = "block";
+            base.style.display = "none";
+            fromla.style.display = "block";
+            date.style.display = "none";
+        }
+    });
+
+
+
+</script>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Search Patients</h1>
+
+    <form method="get" id="report-search-form">
+        {% csrf_token %}
+
+        <div id="individual-fields">
+            <label for="firstname">First name:</label>
+            <input type="text" id="firstname" name="firstname">
+
+            <label for="lastname">Last name:</label>
+            <input type="text" id="lastname" name="lastname">
+
+            <label for="age">Age:</label>
+            <input type="text" id="age" name="age">
+
+        </div>
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Search Results</h2>
+
+    {% for x in patients %}
+    <div class="list">
+        <div class="imgpat">
+            <img src="image.png">
+        </div>
+        <div class="pat-info">
+            <h4>{{ x.firstname }} {{ x.lastname }}</h4>
+            <p>Reports: {{ x.num_reports }}</p>
+            <p>Patient number:{{x.id}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</body>

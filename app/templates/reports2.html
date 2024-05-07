@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'reports2.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Radiology Report Platform</h2>
+            <ul>
+                <li class="ispressed">Report</a></li>
+                <li><a href="{% url 'patients' %}">Patient</a></li>
+                <li><a href="#">Statistics</a></li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="#">Reports</a></li>
+                </ul>
+                <img src="image.png" alt="" class="prf-pic">
+            </div>
+            <div class="page">
+
+                <div class="box">
+                    <div class="table-container">
+                        <div class="top-section">
+                            <div class="column">
+                                <a href="{% url 'reports' %}" class="btn">Your Reports</a>
+                            </div>
+                            <div class="column">
+                                <a href="{% url 'all_reports' %}" class="ispressed">Other Reports</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="search-button">
+                        <a href="{% url 'report_search' %}" class="btn">Search Reports</a>
+                    </div>
+                    {% for x in report %}
+                    <div class="list" id="report-">
+                        <div class="pat-info">
+                            <h2 class="seemore"><a href="rdetails/{{x.id}}">see more</a></h2>
+                            <h4>Report Nb: {{x.id}}</h4>
+                            <p>Type: {{ x.type }}</p>
+                            <p>Patient age:{{x.patient.age}}</p>
+                            <p>Radiologist:{{x.user.firstname}} {{x.user.lastname}}</p>
+                            <p>Radiologist username:{{x.user.username}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="sidefilter">
+                    {% for radiologist in radiologists %}
+                    <li><button onclick="filterReports('{{ radiologist.username }}')">{{ radiologist.username }}</button></li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        function filterReports(radiologistUsername) {
+            // Show reports related to the selected radiologist
+            const relatedReports = document.querySelectorAll(`[id^="report-"]`);
+            relatedReports.forEach(report => {
+                // Iterate over <p> elements inside the report
+                const paragraphs = report.querySelectorAll('p');
+                
+                paragraphs.forEach(p => {
+                    
+                    if (p.textContent.includes(radiologistUsername)) {
+                        console.log("a");
+                        report.style.display = 'block';
+                    }
+                    else
+                        report.style.display = 'none';
+                });
+            });
+        }
+
+    </script>
+
+</body>
+</html>
