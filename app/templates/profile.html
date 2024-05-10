@@ -28,20 +28,48 @@
                 <img src="image.png" alt="" class="prf-pic">
             </div>
             <div class="page">
-                <div class="inf-2">
-                    <h1>User Profile</h1>
-                    <ul>
-                        <li>Username: {{ user.username }}</li>
-                        <li>First Name: {{ user.first_name }}</li>
-                        <li>Last Name: {{ user.last_name }}</li>
-                        <li>Role: {{ user.role }}</li>
-                        <p>Last Login: {{ user.last_login }}</p>
-                        <a href="{% url 'send_message' %}?receiver={{ user.username }}" class="btn">Send Message</a>
+                <div class="profile">
+                    <!-- sq1 -->
+                    <div class="sq1">
+                        <img src="{%static 'image.png'%}" alt="" class="prf-pic">
+                        <table>
+                            <tr>
+                                <th>Username:</th>
+                                <th>&nbsp;&nbsp;{{ user.username }}</th>
+                            </tr>
+                            <tr>
+                                <th>First Name:</th>
+                                <th>&nbsp;&nbsp;{{ user.first_name }}</th>
+                            </tr>
+                            <tr>
+                                <th>Last Name:</th>
+                                <th>&nbsp;&nbsp;{{ user.last_name }}</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- sq2 -->
+                    <div class="flex2">
+                        <div class="sq2">
+                            <table>
+                                <tr>
+                                    <th>Role:</th>
+                                    <th>&nbsp;&nbsp;{{ user.role }}</th>
+                                </tr>
+                                <tr>
+                                    <th>Last Login:</th>
+                                    <th>&nbsp;&nbsp;{{ user.last_login }}</th>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- sq3 -->
                         {% if user.role == 'Radiologist' %}
-                        <a href="{% url 'reports' %}" class="btn">View Radiologist's Reports</a>
-                        <a href="{% url 'patients' %}" class="btn">View Radiologist's Patients</a>
+                        <div class="sq3">
+                            <a href="{% url 'send_message' %}?receiver={{ user.username }}" class="btn">Send Message</a> 
+                            <a href="{% url 'reports' %}" class="btn">View Radiologist's Reports</a>
+                            <a href="{% url 'patients' %}" class="btn">View Radiologist's Patients</a>
+                        </div>
                         {% endif %}
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>

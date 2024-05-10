@@ -33,12 +33,11 @@ from django import forms
 from .models import Message
 
 class MessageForm(forms.ModelForm):
-    receiver = forms.CharField(max_length=100)  # Define receiver field separately
+    receiver = forms.CharField(max_length=100)  
 
     class Meta:
         model = Message
-        fields = ['subject','content', 'image']  # Include receiver field in the form
-
+        fields = ['subject','content', 'image']  
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['image'].required = False 

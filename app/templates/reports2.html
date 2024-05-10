@@ -55,9 +55,11 @@
                     {% endfor %}
                 </div>
                 <div class="sidefilter">
-                    {% for radiologist in radiologists %}
-                    <li><button onclick="filterReports('{{ radiologist.username }}')">{{ radiologist.username }}</button></li>
-                    {% endfor %}
+                    <ul>
+                        {% for radiologist in radiologists %}
+                        <li><button onclick="filterReports('{{ radiologist.username }}')">{{ radiologist.username }}</button></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
@@ -67,10 +69,8 @@
 
     <script>
         function filterReports(radiologistUsername) {
-            // Show reports related to the selected radiologist
             const relatedReports = document.querySelectorAll(`[id^="report-"]`);
             relatedReports.forEach(report => {
-                // Iterate over <p> elements inside the report
                 const paragraphs = report.querySelectorAll('p');
                 
                 paragraphs.forEach(p => {

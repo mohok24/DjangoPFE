@@ -139,24 +139,108 @@ p {
 
 .page {
     height: 100%;
-    width: 100%;
+    width: 1100px;
 }
 
 
-.inf-2 {
+.main_content .page .profile {
+    height: 100%;
+    width: 100%;
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 80px;
+    display: flex;
 }
 
-.page div {
-    border: 1px solid black;
+.page .profile .sq1{
+    flex:1;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.page .profile .sq1 img.prf-pic{
+    flex:3;
+    align-self: center;
+    margin: 0 auto;
+}
+
+.page .profile .flex2{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    height:300px;
+    margin-left: 15px;
+    padding-bottom: 15px;
+    
+}
+
+.page .profile div.sq1,
+.page .profile .flex2 div.sq2,
+.page .profile .flex2 div.sq3{
     color: black;
+    background-color: rgba(184, 186, 233, .5);
     border-radius: 10px;
     padding: 3px;
     margin-bottom: 4px;
     width:300px;
-    height:200px;
+    min-height: 200px;
+}
+
+.page .profile div.sq1{
+    width:300px;
+    height: 415px;
+    padding: 30px;
+}
+
+.page .profile div.sq1 table{
+    flex: 2;
+    margin-top: 5%;
+}
+
+div.sq1 table tr{
+    padding: 2px;
+}
+
+div.sq1 table tr th{
+    color: black;
+    text-align: left;
+    font-weight: normal;
+} 
+
+div.sq2 table{
+    margin-top: 25%;
+    margin-left: 10px;
+}
+
+div.sq2 table tr th{
+    color: black;
+    text-align: left;
+    font-weight: normal;
+} 
+
+.page .profile .flex2 .sq2{
+    flex:1;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.page .profile .flex2 .sq3{
+    flex:1;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sq3 a{
+    display: inline-block;
+    margin-bottom: 5px;
 }
 
 h1, h3 {
@@ -177,10 +261,12 @@ h2 {
 .btn {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff; /* Blue color */
+    width: 250px;
+    text-align: center;
+    background-color: #007bff;
+    border-radius: 10px;
     color: #fff; /* White text color */
     text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Rounded corners */
     transition: background-color 0.3s ease; /* Smooth transition */
 }
 

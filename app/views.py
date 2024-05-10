@@ -19,10 +19,11 @@ from django.http import JsonResponse
 from app.models import Message
 from .forms import ReportForm, ReportSearchForm,PatientSearchForm
 from django.db.models import Max
+from app.ai_model import AI
 
 import re
 
-
+ai=AI(model_path="text_gen_model2.h5")
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
@@ -128,13 +129,15 @@ def patients(request):
         
 def all_patients(request):
     patients_with_reports = Patient.objects.all()
+    radiologists = User.objects.filter(role='Radiologist')
 
     for patient in patients_with_reports:
         patient.num_reports = patient.report_set.count()
-
     context = {
-        'patients_with_reports': patients_with_reports
-    }
+        'patients_with_reports': patients_with_reports,
+        'radiologists': radiologists
+    
+        }
 
     return render(request, 'patient2.html', context) 
 
@@ -530,11 +533,10 @@ from django.http import JsonResponse
 import time
 
 def predict(request):
-    input_text = request.POST.get('input_text', '')
-
-    dummy_predicted_text = "This is a predicted text from the AI model."
-
-    return JsonResponse({'predicted_text': dummy_predicted_text})
+    text = request.POST.get('input_text', '')
+    text=AI.preprocess(text)    
+    predicted_word=ai.predict_next_word(text,1)
+    return JsonResponse({'predicted_text': predicted_word})
 
 def add_report(request):
     if request.method == 'POST':

@@ -35,7 +35,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         var typingTimer;
-        var doneTypingInterval = 3000;
+        var doneTypingInterval = 0;
         var suggestedWordAdded = false;
         $('div[contenteditable="true"]').on('input', function () {
             clearTimeout(typingTimer);
@@ -65,7 +65,7 @@
                     setCaretPosition(this, cursorPosition + suggestedWord.length);
                     suggestedWordAdded = true;
                 }
-            }
+            } else { $div = $(this); removeSuggestedWord($div); }
         });
 
 
@@ -113,10 +113,18 @@
                 });
             }
         }
-
         function removeSuggestedWord($div) {
-            $div.find('#suggestedWord').remove();
-            suggestedWordAdded = false;
+            if ($div && $div.length > 0) {
+                var $suggestedWord = $div.find('#suggestedWord');
+                if ($suggestedWord.length > 0) {
+                    $suggestedWord.remove();
+                    suggestedWordAdded = false;
+                } else {
+                    console.log("Element with id 'suggestedWord' not found.");
+                }
+            } else {
+                console.log("$div is undefined or empty.");
+            }
         }
     </script>
 

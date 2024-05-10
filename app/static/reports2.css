@@ -342,6 +342,19 @@ input {
 .page{
     display:flex;
 }
-.page .sidefilter{
+.sidefilter {
+    display: flex;
+    align-items: center;
+}
+.page ul{
+    display:flex;
+    border-radius:3px;
+    align-items:center;
+    flex-direction:column;
     background-color:black;
+}
+li{
+    
+    text-align:center;
+    padding:10px;
 }

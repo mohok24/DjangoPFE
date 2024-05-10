@@ -3,7 +3,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.admin import UserAdmin
 from .models import User, Patient, Report
+from .models import DocumentFolderPath
 
+admin.site.register(DocumentFolderPath)
 admin.site.register(Report)
 admin.site.register(Patient)
 

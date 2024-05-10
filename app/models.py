@@ -8,6 +8,7 @@ class User(AbstractUser):
 
 class Patient(models.Model):
     id = models.AutoField(primary_key=True)
+    radiologists = models.ManyToManyField(User)
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
     age = models.IntegerField()
@@ -16,22 +17,22 @@ class Report(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateField()
+    acr = models.CharField(max_length=255, default="N/A")
     type = models.CharField(max_length=255, default="N/A")
     indication = models.CharField(max_length=255, default="N/A")
     leftM = models.CharField(max_length=255, default="N/A")
     rightM = models.CharField(max_length=255, default="N/A")
     bothM = models.CharField(max_length=255, default="N/A")
+    noneM=models.CharField(max_length=255,default="N/A")
     leftE = models.CharField(max_length=255, default="N/A")
     rightE = models.CharField(max_length=255, default="N/A")
     bothE = models.CharField(max_length=255, default="N/A")
+    noneE=models.CharField(max_length=255,default="N/A")
     leftclassification = models.CharField(max_length=255, default="N/A")
     rightclassification = models.CharField(max_length=255, default="N/A")
     bothclassification = models.CharField(max_length=255,default="N/A")
     conclusion = models.CharField(max_length=255, default="N/A")
     recommendations = models.CharField(max_length=255, default="N/A")
-
-class Struct(models.Model):
-    struct_desc = models.CharField(max_length=255)
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
@@ -44,3 +45,21 @@ class Message(models.Model):
 
     def __str__(self):
         return f"From {self.sender.username} to {self.receiver.username} ({self.timestamp})"
+
+class DocumentFolderPath(models.Model):
+    DEFAULT_FOLDER_PATH = 'D:\\reports\\meow'
+    DEFAULT_DESTIN_PATH = 'D:\\report\\meow\\processed'
+    folder_path = models.CharField(max_length=255, default=DEFAULT_FOLDER_PATH)
+    destin_path = models.CharField(max_length=255, default=DEFAULT_DESTIN_PATH)
+
+    def __str__(self):
+        return self.folder_path
+
+    def save(self, *args, **kwargs):
+        if DocumentFolderPath.objects.exists():
+            return
+        super().save(*args, **kwargs)
+    @classmethod
+    def create_default_instance(cls):
+        if not cls.objects.exists():
+            cls.objects.create(folder_path=cls.DEFAULT_FOLDER_PATH)

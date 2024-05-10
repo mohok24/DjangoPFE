@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'patient.css' %}">
+    <link rel="stylesheet" href="{% static 'reports2.css' %}">
     <title>Document</title>
 </head>
 <body>
@@ -41,20 +41,52 @@
                         <a href="{% url 'patient_search' %}" class="btn">Search patients!</a>
                     </div>
                     {% for x in patients_with_reports %}
-                    <div class="list">
+                    <div class="list" id="patient-{{ x.id }}">
                         <div class="pat-info">
-                            <h2 class="seemore"><a href="details/{{x.id}}">see more</a></h2>
-                            <h2>Patient number:{{x.id}}</h2>
+                            <h2 class="seemore"><a href="details/{{ x.id }}">see more</a></h2>
+                            <h2>Patient number: {{ x.id }}</h2>
                             <p>Reports: {{ x.num_reports }}</p>
-                            <p>Patient age:{{x.age}}</p>
-                            
+                            <p>Patient age: {{ x.age }}</p>
+                            <p>Radiologists:</p>
+                            <ul>
+                                {% for radiologist in x.radiologists.all %}
+                                <li>{{ radiologist.first_name }} {{ radiologist.last_name }}</li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                     {% endfor %}
+
+                </div>
+                <div class="sidefilter">
+                    <ul>
+                        {% for radiologist in radiologists %}
+                        <li><button onclick="filterReports('{{ radiologist.username }}')">{{ radiologist.username }}</button></li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
 
     </div>
+    <script>
+        function filterReports(radiologistUsername) {
+            const relatedReports = document.querySelectorAll(`[id^="patient-"]`);
+            relatedReports.forEach(report => {
+                const paragraphs = report.querySelectorAll('p');
+
+                paragraphs.forEach(p => {
+
+                    if (p.textContent.includes(radiologistUsername)) {
+                        console.log("a");
+                        report.style.display = 'block';
+                    }
+                    else
+                        report.style.display = 'none';
+                });
+            });
+        }
+
+    </script>
 </body>
 </html>
