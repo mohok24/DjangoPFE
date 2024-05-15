@@ -2,132 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>adding reports</title>
-    <style>
-       
-        .grayed-out {
-            color: #888; 
-        }
-
-        body div{
-            border: 2px solid #ccc;
-            padding: 5px;
-            min-height: 50px;
-            width: 300px;
-            outline: none;
-
-        }
-
-        #suggestedWord {
-            color: #888;
-        }
-    </style>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'addreport.css' %}">
+    <title>Document</title>
 </head>
 <body>
-    <form id="myForm" method="post">
-        {% csrf_token %}
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2>Radiology Report Platform</h2>
+            <ul>
+                <li><a href="{% url 'reports' %}">Report</a></li>
+                <li class="ispressed">Patient</li>
+                <li><a href="#">Statistics</a></li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="{%url 'add_report'%}">Add</a></li>
+                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
+                </ul>
+            </div>
+            <div class="page">
+                <form id="myForm" method="post">
+                    {% csrf_token %}
 
-        {{report_form.as_p}}
-        <button type="submit">Submit</button>
-    </form>
+                    {{report_form.as_p}}
+                    <button type="submit">Submit</button>
+                </form>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        var typingTimer;
-        var doneTypingInterval = 0;
-        var suggestedWordAdded = false;
-        $('div[contenteditable="true"]').on('input', function () {
-            clearTimeout(typingTimer);
-            var $div = $(this);
-            var text = $div.text().trim();
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    var typingTimer;
+                    var doneTypingInterval = 0;
+                    var suggestedWordAdded = false;
+                    $('div[contenteditable="true"]').on('input', function () {
+                        clearTimeout(typingTimer);
+                        var $div = $(this);
+                        var text = $div.text().trim();
 
-            if (text && !(text.endsWith('.'))) {
-                typingTimer = setTimeout(function () {
-                    sendRequest($div);
-                }, doneTypingInterval);
-            } else {
-                removeSuggestedWord();
-            }
-        });
+                        if (text && !(text.endsWith('.'))) {
+                            typingTimer = setTimeout(function () {
+                                sendRequest($div);
+                            }, doneTypingInterval);
+                        } else {
+                            removeSuggestedWord();
+                        }
+                    });
 
-        $('div[contenteditable="true"]').keydown(function (e) {
-            if (e.keyCode == 9) {
-                e.preventDefault();
-                var $div = $(this);
-                if ($div.find('#suggestedWord').length && !suggestedWordAdded) {
-                    var suggestedWord = $div.find('#suggestedWord').text();
-                    removeSuggestedWord($div);
-                    var text = $div.text();
-                    var cursorPosition = getCaretPosition(this);
-                    var newText = text.slice(0, cursorPosition) + suggestedWord + text.slice(cursorPosition);
-                    $div.text(newText);
-                    setCaretPosition(this, cursorPosition + suggestedWord.length);
-                    suggestedWordAdded = true;
-                }
-            } else { $div = $(this); removeSuggestedWord($div); }
-        });
+                    $('div[contenteditable="true"]').keydown(function (e) {
+                        if (e.keyCode == 9) {
+                            e.preventDefault();
+                            var $div = $(this);
+                            if ($div.find('#suggestedWord').length && !suggestedWordAdded) {
+                                var suggestedWord = $div.find('#suggestedWord').text();
+                                removeSuggestedWord($div);
+                                var text = $div.text();
+                                var cursorPosition = getCaretPosition(this);
+                                var newText = text.slice(0, cursorPosition) + suggestedWord + text.slice(cursorPosition);
+                                $div.text(newText);
+                                setCaretPosition(this, cursorPosition + suggestedWord.length);
+                                suggestedWordAdded = true;
+                            }
+                        } else { $div = $(this); removeSuggestedWord($div); }
+                    });
 
 
-        function getCaretPosition(element) {
-            var selection = window.getSelection();
-            if (selection.rangeCount > 0) {
-                var range = selection.getRangeAt(0);
-                var preCaretRange = range.cloneRange();
-                preCaretRange.selectNodeContents(element);
-                preCaretRange.setEnd(range.endContainer, range.endOffset);
-                return preCaretRange.toString().length;
-            }
-            return 0;
-        }
-
-        function setCaretPosition(element, position) {
-            var range = document.createRange();
-            var selection = window.getSelection();
-            range.setStart(element.firstChild, position);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
-        }
-
-        function sendRequest($div) {
-            var inputValue = $div.text();
-            if (!$div.find('#suggestedWord').length) {
-                var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
-                $.ajax({
-                    type: 'POST',
-                    headers: { 'X-CSRFToken': csrfToken },
-                    data: {
-                        'input_text': $div.text(),
-                        'csrfmiddlewaretoken': csrfToken
-                    },
-                    url: 'predict',
-                    success: function (response) {
-                        var suggestedWord = '<span id="suggestedWord" class="grayed-out"> ' + response.predicted_text + '</span>';
-                        $div.append(suggestedWord);
-                        suggestedWordAdded = false;
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('AJAX request failed:', status, error);
+                    function getCaretPosition(element) {
+                        var selection = window.getSelection();
+                        if (selection.rangeCount > 0) {
+                            var range = selection.getRangeAt(0);
+                            var preCaretRange = range.cloneRange();
+                            preCaretRange.selectNodeContents(element);
+                            preCaretRange.setEnd(range.endContainer, range.endOffset);
+                            return preCaretRange.toString().length;
+                        }
+                        return 0;
                     }
-                });
-            }
-        }
-        function removeSuggestedWord($div) {
-            if ($div && $div.length > 0) {
-                var $suggestedWord = $div.find('#suggestedWord');
-                if ($suggestedWord.length > 0) {
-                    $suggestedWord.remove();
-                    suggestedWordAdded = false;
-                } else {
-                    console.log("Element with id 'suggestedWord' not found.");
-                }
-            } else {
-                console.log("$div is undefined or empty.");
-            }
-        }
-    </script>
 
+                    function setCaretPosition(element, position) {
+                        var range = document.createRange();
+                        var selection = window.getSelection();
+                        range.setStart(element.firstChild, position);
+                        range.collapse(true);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+
+                    function sendRequest($div) {
+                        var inputValue = $div.text();
+                        if (!$div.find('#suggestedWord').length) {
+                            var csrfToken = $('[name="csrfmiddlewaretoken"]').val();
+                            $.ajax({
+                                type: 'POST',
+                                headers: { 'X-CSRFToken': csrfToken },
+                                data: {
+                                    'input_text': $div.text(),
+                                    'csrfmiddlewaretoken': csrfToken
+                                },
+                                url: 'predict',
+                                success: function (response) {
+                                    var suggestedWord = '<span id="suggestedWord" class="grayed-out"> ' + response.predicted_text + '</span>';
+                                    $div.append(suggestedWord);
+                                    suggestedWordAdded = false;
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('AJAX request failed:', status, error);
+                                }
+                            });
+                        }
+                    }
+                    function removeSuggestedWord($div) {
+                        if ($div && $div.length > 0) {
+                            var $suggestedWord = $div.find('#suggestedWord');
+                            if ($suggestedWord.length > 0) {
+                                $suggestedWord.remove();
+                                suggestedWordAdded = false;
+                            } else {
+                                console.log("Element with id 'suggestedWord' not found.");
+                            }
+                        } else {
+                            console.log("$div is undefined or empty.");
+                        }
+                    }
+                </script>
+</div>
+            </div>
+            </div>
 </body>
 </html>
-    

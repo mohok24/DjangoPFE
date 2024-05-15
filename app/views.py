@@ -548,3 +548,11 @@ def add_report(request):
     else:
         report_form = ReportForm()
         return render(request, 'add_report.html', {'report_form': report_form})
+    
+from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.contrib.auth import logout
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('home'))

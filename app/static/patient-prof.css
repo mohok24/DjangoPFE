@@ -151,7 +151,7 @@ p {
 }
 .pat-info {
     display: flex;
-    justify-content: center; /* Horizontally center the items */
+    justify-content: center;
     flex-wrap:wrap;
 }
 .inf-2 {
@@ -199,6 +199,9 @@ p {
     background-color: rgb(138, 197, 236);
 }
 #history-section {
-    justify-content: center; /* Horizontally center the items */
+    justify-content: center; 
     background-color: rgb(138, 197, 236);
+}
+.dir-link li:first-child {
+    padding-right: 50%;
 }

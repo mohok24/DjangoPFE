@@ -23,10 +23,9 @@
             <div class="main_content">
                 <div class="header">
                     <ul class="dir-link">
-                        <li><a href="{% url 'patients' %}">Patients</a></li>
-                        <li>> patN°{{patient.id}}</li>
+                        <li><a href="{% url 'patients' %}">Patients</a> > patN°{{patient.id}}</li>
+                        <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                     </ul>
-                    <img src="image.png" alt="" class="prf-pic">
                 </div>
                 <div class="page">
                     <div class="pat-info">

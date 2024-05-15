@@ -22,6 +22,8 @@
             <div class="header">
                 <ul class="dir-link">
                     <li><a href="#">Messages</a></li>
+                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a></li>
+                    <li><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
                 <img src="image.png" alt="" class="prf-pic">
             </div>

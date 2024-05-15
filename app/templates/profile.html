@@ -23,7 +23,7 @@
             <div class="header">
                 <ul class="dir-link">
                     <li><a href="{% url 'reports' %}">Reports</a></li>
-                    <li>> {{ user.id }}</li>
+                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
                 <img src="image.png" alt="" class="prf-pic">
             </div>
@@ -62,13 +62,14 @@
                             </table>
                         </div>
                         <!-- sq3 -->
-                        {% if user.role == 'Radiologist' %}
                         <div class="sq3">
-                            <a href="{% url 'send_message' %}?receiver={{ user.username }}" class="btn">Send Message</a> 
+                            <a href="{% url 'send_message' %}?receiver={{ user.username }}" class="btn">Send Message</a>
+                            {% if user.role == 'Radiologist' %}
                             <a href="{% url 'reports' %}" class="btn">View Radiologist's Reports</a>
                             <a href="{% url 'patients' %}" class="btn">View Radiologist's Patients</a>
+                            {% endif %}
+
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

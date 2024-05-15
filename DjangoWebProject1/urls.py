@@ -8,9 +8,6 @@ from whitenoise.middleware import WhiteNoiseMiddleware
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "DjangoWebProject1.settings")
 django_application = get_asgi_application()
 
-# Wrap the Django application with ASGIStaticFilesHandler and WhiteNoiseMiddleware
-application = WhiteNoiseMiddleware(ASGIStaticFilesHandler(django_application))
-
 # Optional: Enable debug mode if needed
 settings.DEBUG = True
 
@@ -37,9 +34,9 @@ urlpatterns = [
     path('rdetails/<int:id>', views.rdetails, name='rdetails'),
     path('reports/search/', views.report_search, name='report_search'),
     path('patients/search/', views.patient_search, name='patient_search'),
-    path('send-message/', views.send_message, name='send_message'),
+    path('send_message/', views.send_message, name='send_message'),
     path('restricted/', views.restricted_view, name='restricted'),
-    path('receive-message/', views.receive_message, name='receive_message'),
+    path('receive_message/', views.receive_message, name='receive_message'),
     path('delete_message/', views.delete_message, name='delete_message'),
     path('statistics',views.statistics,name='statistics'),
     path('message/<int:message_id>/', views.message_details, name='message_details'),
@@ -47,8 +44,9 @@ urlpatterns = [
     path('all_reports',views.all_reports,name='all_reports'),
     path('all_patients',views.all_patients,name='all_patients'),
     path('profile/<int:user_id>/',views.profile,name='profile'),
-    path('add_report',views.add_report,name='add_profile'),
-    path('predict',views.predict,name='predict'),
+    path('add_report/',views.add_report,name='add_report'),
+    path('add_report/predict',views.predict,name='predict'),
+    path('logout/',views.logout,name='logout'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

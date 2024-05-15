@@ -6,7 +6,7 @@ import shutil
 import spacy
 from docx import Document
 from models import DocumentFolderPath
-from models import Report
+from models import Report,Patient
 class MyCronJob(CronJobBase):
     RUN_AT_TIMES = ['00:00'] 
 
@@ -266,7 +266,7 @@ class MyCronJob(CronJobBase):
                     b=x.strip()
                     if b==indication:
                         matches.remove(x)            
-            if not (left_match or right_match): #this is only for just mammo
+            if not (left_match or right_match): 
                 classify_sentences(echo,'e')
                 reinitialize()
                 left = None
@@ -278,7 +278,7 @@ class MyCronJob(CronJobBase):
                 if(right_match):
                     right=right_match.group()
                     nreport.rightE=right
-            if not (leftm_match or rightm_match): #this is only for just mammo
+            if not (leftm_match or rightm_match):
                 classify_sentences(mammo,'m')   
                 reinitialize()
                 left = None
@@ -292,7 +292,7 @@ class MyCronJob(CronJobBase):
                     nreport.rightM=rightm
         
             for x in matches:
-                nreport.indication=x
+                nreport.indication=nreport.indication+x
             date=frenchtoiso(date)
             nreport.date=date
             if left:
@@ -321,7 +321,7 @@ class MyCronJob(CronJobBase):
     
             rightc_match=[]
             leftc_match=[]
-     
+            existing_patient=Patient.objects.filter(firstname=patient_name)
             nreport.save()
             move_file(file,destination_folder)
         pass
