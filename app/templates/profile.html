@@ -12,11 +12,12 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2>Radiology Report Platform</h2>
+            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
             <ul>
-                <li class="ispressed">Report</li>
+                <li class="ispressed">Reports</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
                 <li><a href="#">Statistics</a></li>
+                <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
@@ -65,8 +66,8 @@
                         <div class="sq3">
                             <a href="{% url 'send_message' %}?receiver={{ user.username }}" class="btn">Send Message</a>
                             {% if user.role == 'Radiologist' %}
-                            <a href="{% url 'reports' %}" class="btn">View Radiologist's Reports</a>
-                            <a href="{% url 'patients' %}" class="btn">View Radiologist's Patients</a>
+                            <a href="{% url 'all_reports' %}?radiologist={{ user.username }}" class="btn">View Radiologist's Reports</a>
+                            <a href="{% url 'all_patients' %}?radiologist={{ user.username }}" class="btn">View Radiologist's Patients</a>
                             {% endif %}
 
                         </div>

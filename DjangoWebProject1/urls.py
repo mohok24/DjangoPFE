@@ -36,7 +36,7 @@ urlpatterns = [
     path('patients/search/', views.patient_search, name='patient_search'),
     path('send_message/', views.send_message, name='send_message'),
     path('restricted/', views.restricted_view, name='restricted'),
-    path('receive_message/', views.receive_message, name='receive_message'),
+    path('messages/', views.receive_message, name='messages'),
     path('delete_message/', views.delete_message, name='delete_message'),
     path('statistics',views.statistics,name='statistics'),
     path('message/<int:message_id>/', views.message_details, name='message_details'),
@@ -47,6 +47,11 @@ urlpatterns = [
     path('add_report/',views.add_report,name='add_report'),
     path('add_report/predict',views.predict,name='predict'),
     path('logout/',views.logout,name='logout'),
+    path('homeres/',views.homeres,name='homeres'),
+    path('homerad/',views.homerad,name='homerad'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+
+
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -12,7 +12,7 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2>Radiology Report Platform</h2>
+            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
             <ul>
                 <li><a href="{% url 'reports' %}">Report</a></li>
                 <li class="ispressed">Patients</li>
@@ -48,7 +48,11 @@
                                     {% for report in reports %}
                                     <li>
                                         Report ID: {{ report.id }}, Radiologist:
+                                        {% if report.user and report.user.id %}
                                         <a href="{% url 'profile' report.user.id %}">{{ report.user.username }}</a>
+                                        {% else %}
+                                        <span>{{ report.user.username }}</span>
+                                        {% endif %}
                                     </li>
                                     {% endfor %}
                                 </ul>

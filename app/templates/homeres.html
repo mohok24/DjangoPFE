@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid View Box Corners</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'homeres.css' %}">
+</head>
+<body>
+    <header class="header">
+        <h2 class="logo">Radiology Report Platform</h2>
+
+        <nav class="navbar">
+            <ul class="dir-link">
+                <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="box top-left">
+            <h3>View Anonymized Patients</h3>
+            <p>View patient information and history.</p>
+            <a href="{% url 'patients' %}">Go to Patients</a>
+        </div>
+        <div class="box top-right">
+            <h3>View Anonymized Reports</h3>
+            <p>Access and view radiology reports.</p>
+            <a href="{% url 'reports' %}">Go to Reports</a>
+        </div>
+        <div class="box bottom-left">
+            <h3>View Statistics</h3>
+            <p>Analyze data and view statistics.</p>
+            <a href="#">Go to Statistics</a>
+        </div>
+        <div class="box bottom-right">
+            <h3>View Messages</h3>
+            <p>Check and send messages.</p>
+            <a href="{% url 'messages' %}">Go to Messages</a>
+        </div>
+    </div>
+</body>
+</html>

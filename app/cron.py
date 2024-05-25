@@ -4,9 +4,10 @@ import datetime
 import re
 import shutil
 import spacy
+import os
 from docx import Document
-from models import DocumentFolderPath
-from models import Report,Patient
+from .models import DocumentFolderPath
+from .models import Report,Patient
 class MyCronJob(CronJobBase):
     RUN_AT_TIMES = ['00:00'] 
 
@@ -25,24 +26,32 @@ class MyCronJob(CronJobBase):
                 no_side_sentences=[]
         def frenchtoiso(date_str):
             french_month_names = {
-                'janvier': 1, 'février': 2, 'mars': 3, 'avril': 4, 'mai': 5, 'juin': 6,
-                'juillet': 7, 'août': 8, 'septembre': 9, 'octobre': 10, 'novembre': 11, 'décembre': 12
+                'janvier': 1, 'fÃ©vrier': 2, 'mars': 3, 'avril': 4, 'mai': 5, 'juin': 6,
+                'juillet': 7, 'aoÃ»t': 8, 'septembre': 9, 'octobre': 10, 'novembre': 11, 'dÃ©cembre': 12
             }
             day_name, day, month_name, year = date_str.split()
             month = french_month_names[month_name.lower()]
             date_obj = datetime.datetime.strptime(f"{day} {month} {year}", "%d %m %Y")
             iso_date_str = date_obj.strftime("%Y-%m-%d")
             return iso_date_str
+        global left_keywords
+        global right_keywords
+        global both_keywords
+        global left_side_sentences
+        global right_side_sentences
+        global both_sides_sentences
+        global no_side_sentences
         left_keywords = ["gauche", "left"]
         right_keywords = ["droite", "right","droit"]
-        both_keywords = ["trame conjonctivo glandulaire","aire axillaire libre","système canalaire non dilaté","axillaires libres","ganglions axillaires bilatéraux","au niveau des deux seins","bilatéraux","plans graisseux sous cutanés","revêtement cutané fin et régulier", "foyers","homogènes","seins à trame","bilatéral", "bilateral","absence ","cutané fin régulier","acr", "bilatérale"]
+        both_keywords = ["trame conjonctivo glandulaire","aire axillaire libre","systÃ¨me canalaire non dilatÃ©","axillaires libres","ganglions axillaires bilatÃ©raux","au niveau des deux seins","bilatÃ©raux","plans graisseux sous cutanÃ©s","revÃªtement cutanÃ© fin et rÃ©gulier", "foyers","homogÃ¨nes","seins Ã  trame","bilatÃ©ral", "bilateral","absence ","cutanÃ© fin rÃ©gulier","acr", "bilatÃ©rale"]
         nlp = spacy.load("fr_core_news_md")
         left_side_sentences = []
         right_side_sentences = []
         both_sides_sentences = []
         no_side_sentences= []
         def move_file(source_path, destination_folder):
-            shutil.move(source_path, destination_folder)
+            if not os.path.exists(destination_folder):
+                shutil.move(source_path, destination_folder)
         destination_folder = "D:/reports/processed"
 
         def split_paragraph(paragraph):
@@ -91,11 +100,18 @@ class MyCronJob(CronJobBase):
             else:
                                        no_side_sentences.append((sentence1,sentence))
         def classify_sentences(text,type):
+            global left_keywords
+            global right_keywords
+            global both_keywords
+            global left_side_sentences
+            global right_side_sentences
+            global both_sides_sentences
+            global no_side_sentences
             test=split_paragraph(text)
             priority_found = False
             reference_sentence = "QSE gauche de 4mm"
             reference_sentence2= "QIE droit : 7,8mm"
-            reference_sentence4="QME gauche : 10 mm et micro-kyste remanié de 04,5 mm"
+            reference_sentence4="QME gaucheÂ : 10 mm et micro-kyste remaniÃ© de 04,5 mm"
             prio_keywords=["pour cible","comme suit","et mesurant :","et mesurant:","pour cible :"]
             newtext = ''
             reference_tokens=nlp(reference_sentence)
@@ -125,33 +141,33 @@ class MyCronJob(CronJobBase):
             print("Sentences referring to the left side:")
             for sentencee in left_side_sentences:
                 if(type=='m'):
-                    nreport.leftM=nreport.leftM+sentencee
+                    nreport.leftM=nreport.leftM+str(sentencee)
                 else:
-                    nreport.leftE=nreport.leftE+sentencee
+                    nreport.leftE=nreport.leftE+str(sentencee)
                 print("-", sentencee)
 
             print("\nSentences referring to the right side:")
             for sentencee in right_side_sentences:
                 if(type=='m'):
-                    nreport.rightM=nreport.rightM+sentencee
+                    nreport.rightM=nreport.rightM+str(sentencee)
                 else:
-                    nreport.rightE=nreport.rightE+sentencee
+                    nreport.rightE=nreport.rightE+str(sentencee)
                 print("-", sentencee)
 
             print("\nSentences referring to both sides:")
             for sentencee in both_sides_sentences:
                 if(type=='m'):
-                    nreport.bothM=nreport.bothM+sentencee
+                    nreport.bothM=nreport.bothM+str(sentencee)
                 else:
-                    nreport.bothE=nreport.bothE+sentencee
+                    nreport.bothE=nreport.bothE+str(sentencee)
                 print("-", sentencee)
 
             print("\nSentences not specifying a side:")
             for sentencee in no_side_sentences:
                 if(type=='m'):
-                    nreport.noneM=nreport.noneM+sentencee
+                    nreport.noneM=nreport.noneM+str(sentencee)
                 else:
-                    nreport.noneE=nreport.noneE+sentencee
+                    nreport.noneE=nreport.noneE+str(sentencee)
                 print("-", sentencee)
         
         def extract_text_from_docx(docx_file_path):
@@ -164,14 +180,14 @@ class MyCronJob(CronJobBase):
 
 
         keywords = [
-            'dépistage',
-            'prévoir',
+            'dÃ©pistage',
+            'prÃ©voir',
             'est souhaitable',
-            'nécessitant',
-            'à compléter par',
-            'recontrôler',
+            'nÃ©cessitant',
+            'Ã  complÃ©ter par',
+            'recontrÃ´ler',
             'toutefois nous recommandons',
-            'contrôle',
+            'contrÃ´le',
             'histologique',
     
         ]
@@ -189,29 +205,31 @@ class MyCronJob(CronJobBase):
         #for paragraph in extracted_text:
         #    print(paragraph)
     
-        conctype_pattern = re.compile(r'Mammographie\s*(bilaterale|unilaterale|unilatérale|bilatérale)\s*(gauche|droite)?\s*(et (échographie)|(echographie) mammaire)?',re.IGNORECASE)
-        type_pattern = re.compile(r'(MAMMOGRAPHIE\s*(/\s*ECHO COMPRISE)|(\s*BILATERALE))',re.IGNORECASE)
-        name_pattern = re.compile(r'(Nom, Prénom : (.+?) \d+ ANS)|(Patient(e) : (.+?) \d+ ANS)') 
+        conctype_pattern = re.compile(r'(Mammographie\s*(bilaterale|unilaterale|unilatÃ©rale|bilatÃ©rale)?\s*(gauche|droite)?\s*(et (Ã©chographie)|(echographie) mammaires?)?)|(Aspect Ã©chographique)',re.IGNORECASE)
+        type_pattern = re.compile(r'(MAMMOGRAPHIE\s*(/\s*ECHO COMPRISE)|(\s*BILATERALE)|(UNILATERALE))',re.IGNORECASE)
+        name_pattern = re.compile(r'(?:Nom, PrÃ©nom : (.+?) \d+ ANS)|(?:Patient(e) : (.+?) \d+ ANS)')
         age_pattern = re.compile(r'(\d+) ANS',re.IGNORECASE)
-        date_pattern = re.compile(r'\b(?:(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s(\d{1,2})\s(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|decembre|fevrier|aout)\s(\d{4}))\b')
+        date_pattern = re.compile(r'\b(?:(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s(\d{1,2})\s(janvier|fÃ©vrier|mars|avril|mai|juin|juillet|aoÃ»t|septembre|octobre|novembre|dÃ©cembre|decembre|fevrier|aout)\s(\d{4}))\b')
         indic_pattern = re.compile(r'(?:motif|indication|MOTIF|INDICATION)\s*:\s*(.+?)\.',re.IGNORECASE)
-        mammography_pattern = re.compile(r'RESULTATS\s*:?\s*(?:\s*Mammographie\s*(?:bilatérale)?:*,*,*\s*)?(.*?)(?:\s*Le\s+complément\s+échographique\s*|\s*échographie\s+mammaire\s*:\s*|Echographie\s*mammaire|Echographie|Conclusion\s*:?|$)'
+        mammography_pattern = re.compile(r'RESULTATS\s*:?\s*(?:\s*Mammographie\s*(?:bilatÃ©rale)?:*,*,*\s*)?(.*?)(?:\s*Le\s+complÃ©ment\s+Ã©chographique\s*|\s*Ã©chographie\s+mammaire\s*:\s*|Echographie\s*mammaire|Echographie|Conclusion\s*:?|$)'
         ,re.IGNORECASE | re.DOTALL)
-        acr_pattern = re.compile(r"type [abcd] de l’ACR", re.IGNORECASE)  
-        echo_pattern = re.compile(r"(?:Le\s*complément\s*échographique\s*|\s*échographie\s+mammaire\s*|\s*echographie\s*mammaire\s*|\s*echographie\s*)(?:,|:)?(.*?)(?=\s*Conclusion|$|Examen)",re.IGNORECASE|re.DOTALL)
+        acr_pattern = re.compile(r"type [abcd] de lâ€™ACR", re.IGNORECASE)  
+        echo_pattern = re.compile(r"(?:Le\s*complÃ©ment\s*Ã©chographique\s*|\s*Ã©chographie\s+mammaire\s*|\s*echographie\s*mammaire\s*|\s*echographie\s*)(?:,|:)?(.*?)(?=\s*Conclusion|$|Examen)",re.IGNORECASE|re.DOTALL)
         recom_pattern = re.compile(r'[^.:,]*?(?:\b(?:' + '|'.join(re.escape(word) for word in keywords) + r')\b).*?(?=\.)', re.IGNORECASE|re.DOTALL)
         conclusion_pattern = re.compile(r'(?:conclusion)\s*(.+)(?:$|Identification)',re.IGNORECASE|re.DOTALL)
         left_pattern = re.compile(r'((Sein\s*sous\s*cicatriciel\s*gauche)(|Sein gauche\s*:))(.*?)(?:Sein\s*droit|conclusion)',re.IGNORECASE | re.DOTALL)
         right_pattern = re.compile(r'((Sein\s*sous\s*cicatriciel\s*droit)|(Sein\s*droit\s*:))(.*?)(?:Sein\s*gauche|$)',re.IGNORECASE | re.DOTALL)
-        left_classification_pattern = re.compile(r"((et)?(sein\s*gauche\s*)?(((classant\s*l'examen)|(examen\s*(classée|classé|classee|class|classées))|(classée)|(classé))?\s*bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|’)ACR)?\s*([a,à]\s*gauche\s*)|(comme à gauche))|((et)?(sein\s*gauche\s*)(((classant\s*l'examen)|(examen\s*(classée|classé|classee|class|classées))|(classée)|(classé))?\s*bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|’)ACR)?\s*)|(Examen du sein gauche\s*(?:.*?)bi-rads\s*[0-6]\s*[a,b,c]?)", re.IGNORECASE|re.DOTALL)
-        right_classification_pattern = re.compile(r"((et)?(sein\s*droit\s*)?(((classant\s*l'examen)|(examen\s*(classée|classé|classee|class|classées))|(classée)|(classé))?\s*bi-rads\s*[0-6]\s*[a,b,c]?(\s*versus [0-6]\s*[a,b,c]?)?)\s*(de l('|’)ACR)?\s*([a,à]\s*droite\s*)|(comme à droite))|((et)?(sein\s*droit\s*)(((classant\s*l'examen)|(examen\s*(classée|classé|classee|class|classées))|(classée)|(classé))?\s*bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|’)ACR)?\s*)|(Examen du sein droit\s*(?:.*?)bi-rads\s*[0-6]\s*[a,b,c]?)",re.IGNORECASE|re.DOTALL)
-        both_classification_pattern = re.compile(r"(bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|’)ACR)?",re.IGNORECASE|re.DOTALL)
+        left_classification_pattern = re.compile(r"((et)?(sein\s*gauche\s*)?(((classant\s*l'examen)|(examen\s*(classÃ©e|classÃ©|classee|class|classÃ©es))|(classÃ©e)|(classÃ©))?\s*bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|â€™)ACR)?\s*([a,Ã ]\s*gauche\s*)|(comme Ã  gauche))|((et)?(sein\s*gauche\s*)(((classant\s*l'examen)|(examen\s*(classÃ©e|classÃ©|classee|class|classÃ©es))|(classÃ©e)|(classÃ©))?\s*bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|â€™)ACR)?\s*)|(Examen du sein gauche\s*(?:.*?)bi-rads\s*[0-6]\s*[a,b,c]?)", re.IGNORECASE|re.DOTALL)
+        right_classification_pattern = re.compile(r"((et)?(sein\s*droit\s*)?(((classant\s*l'examen)|(examen\s*(classÃ©e|classÃ©|classee|class|classÃ©es))|(classÃ©e)|(classÃ©))?\s*bi-rads\s*[0-6]\s*[a,b,c]?(\s*versus [0-6]\s*[a,b,c]?)?)\s*(de l('|â€™)ACR)?\s*([a,Ã ]\s*droite\s*)|(comme Ã  droite))|((et)?(sein\s*droit\s*)(((classant\s*l'examen)|(examen\s*(classÃ©e|classÃ©|classee|class|classÃ©es))|(classÃ©e)|(classÃ©))?\s*bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|â€™)ACR)?\s*)|(Examen du sein droit\s*(?:.*?)bi-rads\s*[0-6]\s*[a,b,c]?)",re.IGNORECASE|re.DOTALL)
+        both_classification_pattern = re.compile(r"(bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l('|â€™)ACR)?",re.IGNORECASE|re.DOTALL)
 
 
         for file in files:
             nreport=Report.objects.create()
             leftm = None;
             rightm = None;
+            rightc_match = None
+            leftc_match = None
             extracted_text = extract_text_from_docx(file)
             text = '\x0a'.join(extracted_text)
             name_match = name_pattern.search(text)
@@ -249,7 +267,7 @@ class MyCronJob(CronJobBase):
             conctype_match=conctype_pattern.search(conclusion) 
             type=conctype_match.group() if conctype_match else None
             if conctype_match: 
-                nreport.type=conctype_match
+                nreport.type=conctype_match.group()
             else:
                 type=type_pattern.search(text) 
                 type=type.group() if type else None
@@ -294,7 +312,8 @@ class MyCronJob(CronJobBase):
             for x in matches:
                 nreport.indication=nreport.indication+x
             date=frenchtoiso(date)
-            nreport.date=date
+            if date:
+                nreport.date=date
             if left:
                 print("left:",left)
                 print("right:",right)
@@ -321,7 +340,19 @@ class MyCronJob(CronJobBase):
     
             rightc_match=[]
             leftc_match=[]
-            existing_patient=Patient.objects.filter(firstname=patient_name)
+            if(len(patient_name.split())==1):
+                firstname2,lastname2=patient_name.split('-')
+            else:
+                firstname2,lastname2=patient_name.split()
+            patient, created = Patient.objects.get_or_create(
+                firstname=patient_name,
+                lastname=lastname2,
+                age=patient_age
+            )
+            nreport.patient=patient
+            nreport.acr=acr
+            nreport.conclusion=conclusion
+            nreport.recommendations=recommendation
             nreport.save()
             move_file(file,destination_folder)
         pass

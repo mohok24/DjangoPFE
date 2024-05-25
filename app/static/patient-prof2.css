@@ -212,3 +212,7 @@ p {
 .page {
     position: relative;
 }
+
+.dir-link li:first-child {
+    padding-right: 70%;
+}

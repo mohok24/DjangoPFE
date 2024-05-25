@@ -11,11 +11,12 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2>Radiology Report Platform</h2>
+            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
             <ul>
-                <li><a href="{% url 'reports' %}">Report</a></li>
-                <li><a href="{% url 'patients' %}">Patient</a></li>
+                <li><a href="{% url 'reports' %}">Reports</a></li>
+                <li><a href="{% url 'patients' %}">Patients</a></li>
                 <li><a href="#">Statistics</a></li>
+                <li class="ispressed"><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
@@ -25,7 +26,6 @@
                     <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a></li>
                     <li><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
-                <img src="image.png" alt="" class="prf-pic">
             </div>
             <div class="page">
                 <div class="box">

@@ -6,6 +6,7 @@ from django import forms
 
 class ReportSearchForm(forms.Form):
     patient_id = forms.IntegerField(required=False)  
+    patient_name = forms.CharField(max_length=100, required=False)
     dates = forms.ChoiceField(choices=[('exact', 'Exact date'), ('range', 'Range')], widget=forms.RadioSelect)
     date = forms.DateField(label='Date', required=False)
     type = forms.CharField(label='Type', required=False)
@@ -23,6 +24,7 @@ class ReportSearchForm(forms.Form):
     to_date = forms.DateField(required=False)
     
 class PatientSearchForm(forms.Form):
+    id = forms.IntegerField(required=False)
     firstname = forms.CharField(label='firstname',required=False)
     lastname = forms.CharField(label='lastname',required=False)
     age = forms.IntegerField(label='age',required=False)
@@ -81,7 +83,7 @@ class ReportForm(forms.ModelForm):
 
     class Meta:
         model = Report
-        fields = ['patient', 'user', 'date', 'type', 'indication', 'leftM', 'rightM', 'bothM', 'leftE', 'rightE', 'bothE', 'leftclassification', 'rightclassification', 'bothclassification', 'conclusion', 'recommendations']
+        fields = ['user', 'date', 'type', 'indication', 'leftM', 'rightM', 'bothM', 'leftE', 'rightE', 'bothE', 'leftclassification', 'rightclassification', 'bothclassification', 'conclusion', 'recommendations']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'indication': EditableDivWidget(attrs={'rows': 3}),
@@ -99,4 +101,8 @@ class ReportForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ReportForm, self).__init__(*args, **kwargs)
+        if self.request and self.request.user:
+            self.fields['user'].initial = self.request.user
+            self.fields['user'].widget = forms.HiddenInput()

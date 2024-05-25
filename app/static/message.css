@@ -40,7 +40,6 @@
   
   .wrapper{
     display: flex;
-    position: fixed;
     width: 100%;
     height: 100%;
   }
@@ -323,3 +322,7 @@ form button:hover{
       input{
           color:black;
       }
+
+.dir-link li:first-child {
+    padding-right: 70%;
+}

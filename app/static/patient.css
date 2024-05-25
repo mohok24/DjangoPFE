@@ -340,3 +340,7 @@ input {
     .page .sidefilter {
         background-color: black;
     }
+
+.dir-link li:first-child {
+    padding-right: 70%;
+}

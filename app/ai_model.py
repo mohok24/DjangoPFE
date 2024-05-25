@@ -34,25 +34,29 @@ class AI:
         print("Input text:", text)
         text = text.lower()
         print("Lowercased text:", text)
-    
+
+        words = text.split()
+        if len(words) > 10:
+            words = words[-10:]  # Keep only the last ten words
+        print("Words considered for prediction:", words)
+
         X = np.zeros((1, self.n_words, len(self.unique_tokens)))
         print("Shape of X:", X.shape)
-    
-        words = []
-        for i, word in enumerate(text.split()):
-            if word in self.unique_token_index:
-                X[0, len(words), self.unique_token_index[word]] = 1
-                words.append(word)
-        print("HEY",words)
-        print(len(self.unique_tokens))
-        print((self.unique_tokens))
 
-        if not words:
+        valid_words = []
+        for i, word in enumerate(words):
+            if word in self.unique_token_index:
+                X[0, i, self.unique_token_index[word]] = 1
+                valid_words.append(word)
+        print("Valid words in input text:", valid_words)
+
+        if not valid_words:
             print("No valid words found in input text.")
             return None 
-    
+
         predictions = self.model.predict(X)[0]
         top_indices = np.argpartition(predictions, -n_best)[-n_best:]
         top_words = [self.unique_tokens[idx] for idx in top_indices]
         return top_words
+
 

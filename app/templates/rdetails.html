@@ -12,20 +12,19 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2>Radiology Report Platform</h2>
+            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
             <ul>
                 <li class="ispressed">Report</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
                 <li><a href="#">Statistics</a></li>
+                <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a href="{% url 'reports' %}">Reports</a></li>
-                    <li>> repN{{report.id}}</li>
-                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a></li>
-                    <li><a href="{%url 'logout'%}">log out?</a></li>
+                    <li><a href="{% url 'reports' %}">Reports</a>> N {{report.id}}</li>
+                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
                 
             </div>
@@ -38,9 +37,15 @@
                     <p class="title">Date: {{ report.date }}</p>
                     <p class="title">Type: {{ report.type }}</p>
                     <p class="title">Indication: {{ report.indication }}</p>
+                    <p class="title">ACR: {{report.acr}} </p>
+                    <h3>Mammogram Information</h3>
+                    <div>
+                        <p class="title">Left: </p><p>{{ report.leftM }}</p>
+                        <p class="title">Right: </p><p>{{ report.rightM }}</p>
+                        <p class="title">Both: </p><p>{{ report.bothM }}</p>
+                    </div>
 
-
-                    <h3>Echocardiogram Information</h3>
+                    <h3>Ultrasound Information</h3>
                     <div>
                         <p class="title">Left: </p><p>{{ report.leftE }}</p>
                         <p class="title">Right: </p><p>{{ report.rightE }}</p>

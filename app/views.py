@@ -29,7 +29,7 @@ def home(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/index.html',
+        'home_page.html',
         {
             'title':'Home Page',
             'year':datetime.now().year,
@@ -93,9 +93,9 @@ def login_view(request):
             print(f"User Role: {user.role}")
             
             if user.role == 'Researcher':
-                next_url = '/about/'  
+                next_url = '/homeres'  
             elif user.role == 'Radiologist':
-                next_url = '/contact/'  
+                next_url = '/homerad'  
             else:
                 next_url = '/'  
             print(f"meowab");
@@ -197,7 +197,7 @@ def details(request, id):
 @login_required
 def reports(request):
     if (request.user.role=='Radiologist'):
-        report = Report.objects.filter(user=request.user).select_related('patient').all()
+        report = Report.objects.filter(patient__radiologists__in=[request.user]).select_related('patient').all()
 
         context = {
         'report': report
@@ -249,6 +249,7 @@ def report_search(request):
         if form.is_valid():
             query = Q()
             patient_id = form.cleaned_data.get('patient_id')
+            patient_name = form.cleaned_data.get('patient_name')
             dates_choice = form.cleaned_data.get('dates')
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
@@ -261,13 +262,26 @@ def report_search(request):
                 query &= Q(date=date)
             elif dates_choice == 'range' and from_date and to_date:
                 query &= Q(date__range=[from_date, to_date])
-
+            if patient_name:
+                name_parts = patient_name.split()
+                if len(name_parts) == 2:
+                    firstname, lastname = name_parts
+                    patients = Patient.objects.filter(
+                        Q(firstname__icontains=firstname) & Q(lastname__icontains=lastname),
+                        radiologists=request.user
+                    )
+                else:
+                    search_name = name_parts[0]
+                    patients = Patient.objects.filter(
+                        Q(firstname__icontains=search_name) | Q(lastname__icontains=search_name),
+                        radiologists=request.user
+                    )
+                query &= Q(patient__in=patients)
             for field_name, field_value in form.cleaned_data.items():
-                if field_name not in ['patient_id','dates', 'from_date', 'to_date'] and field_value:
+                if field_name not in ['patient_id','dates', 'from_date', 'to_date','patient_name'] and field_value:
                     if field_name == 'date':
                         query &= Q(date=field_value)
                     else:
-                        print(field_name," ",field_value)
                         query &= Q(**{field_name + '__icontains': field_value})
 
             reports = Report.objects.filter(query)
@@ -540,14 +554,39 @@ def predict(request):
 
 def add_report(request):
     if request.method == 'POST':
-        report_form = ReportForm(request.POST)
-        if report_form.is_valid():
-            return JsonResponse({'success': True})
-        else:
-            return JsonResponse({'success': False, 'errors': report_form.errors})
+        form = ReportForm(request.POST, request=request)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            age = form.cleaned_data['age']
+            user = request.user
+
+            # Look for existing patient
+            patient = Patient.objects.filter(
+                Q(first_name__icontains=first_name) &
+                Q(last_name__icontains=last_name)
+            ).first()
+
+            if patient:
+                # Update patient's age if found
+                patient.age = age
+                patient.save()
+            else:
+                # Create a new patient if not found
+                patient = Patient.objects.create(first_name=first_name, last_name=last_name, age=age)
+                patient.radiologists.add(user)
+                patient.save()
+
+            # Create the report
+            report = form.save(commit=False)
+            report.patient = patient
+            report.save()
+            
+            return redirect('reports')  
     else:
-        report_form = ReportForm()
-        return render(request, 'add_report.html', {'report_form': report_form})
+        form = ReportForm(request=request)
+
+    return render(request, 'add_report.html', {'form': form})
     
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
@@ -556,3 +595,19 @@ from django.contrib.auth import logout
 def logout_view(request):
     logout(request)
     return redirect(reverse_lazy('home'))
+@login_required
+def homeres(request):
+    return render(request,'homeres.html')
+@login_required
+def homerad(request):
+    return render(request,'homerad.html')
+@login_required
+def dashboard(request):
+    role = request.user.role
+    
+    if role == 'radiologist':
+        return render(request, 'homerad.html')
+    elif role == 'researcher':
+        return render(request, 'homeres.html')
+    else:
+        return render(request, 'homeres.html')

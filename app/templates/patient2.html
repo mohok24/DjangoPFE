@@ -11,11 +11,12 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2>Radiology Report Platform</h2>
+            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
             <ul>
-                <li><a href="{% url 'reports' %}">Report</a></li>
-                <li class="ispressed">Patient</li>
+                <li><a href="{% url 'reports' %}">Reports</a></li>
+                <li class="ispressed">Patients</li>
                 <li><a href="#">Statistics</a></li>
+                <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
@@ -24,7 +25,7 @@
                     <li><a href="#">Patients</a></li>
                     <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
-                
+
             </div>
             <div class="page">
                 <div class="box">
@@ -46,14 +47,19 @@
                         <div class="pat-info">
                             <h2 class="seemore"><a href="details/{{ x.id }}">see more</a></h2>
                             <h2>Patient number: {{ x.id }}</h2>
+                            {% for radiologist in x.radiologists.all %}
+                            {% if user.username == radiologist.username %}
+                            <p>Patient: {{ x.firstname }} {{ x.lastname }}</p>
+                            {% endif %}
+                            {% endfor %}
                             <p>Reports: {{ x.num_reports }}</p>
                             <p>Patient age: {{ x.age }}</p>
-                            <p>Radiologists:</p>
-                            <ul>
-                                {% for radiologist in x.radiologists.all %}
-                                <li>{{ radiologist.first_name }} {{ radiologist.last_name }}</li>
+                            <p  class="radiologist-username">
+                                Radiologists:{% for radiologist in x.radiologists.all %}
+                                {{ radiologist.firstname }} {{ radiologist.lastname }}, {{radiologist.username}}
                                 {% endfor %}
-                            </ul>
+                            </p>
+
                         </div>
                     </div>
                     {% endfor %}
@@ -61,6 +67,7 @@
                 </div>
                 <div class="sidefilter">
                     <ul>
+                        <li><button onclick="filterReports('')">All</button></li>
                         {% for radiologist in radiologists %}
                         <li><button onclick="filterReports('{{ radiologist.username }}')">{{ radiologist.username }}</button></li>
                         {% endfor %}
@@ -70,24 +77,31 @@
         </div>
 
     </div>
+
     <script>
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
         function filterReports(radiologistUsername) {
             const relatedReports = document.querySelectorAll(`[id^="patient-"]`);
             relatedReports.forEach(report => {
-                const paragraphs = report.querySelectorAll('p');
-
-                paragraphs.forEach(p => {
-
-                    if (p.textContent.includes(radiologistUsername)) {
-                        console.log("a");
-                        report.style.display = 'block';
-                    }
-                    else
-                        report.style.display = 'none';
-                });
+                const radiologistParagraph = report.querySelector('.radiologist-username');
+                if (radiologistParagraph && radiologistParagraph.textContent.includes(radiologistUsername)) {
+                    report.style.display = 'block';
+                } else {
+                    report.style.display = 'none';
+                }
             });
         }
 
+        const radiologistUsernameParam = getUrlParameter('radiologist');
+        if (radiologistUsernameParam) {
+            filterReports(radiologistUsernameParam);
+        }
     </script>
 </body>
 </html>
