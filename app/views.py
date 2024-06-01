@@ -557,30 +557,31 @@ def add_report(request):
     if request.method == 'POST':
         form = ReportForm(request.POST, request=request)
         if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            age = form.cleaned_data['age']
+            firstname = request.POST.get('firstname')
+            lastname = request.POST.get('lastname')
+            age = request.POST.get('age')
             user = request.user
-
             patient = Patient.objects.filter(
-                Q(first_name__icontains=first_name) &
-                Q(last_name__icontains=last_name)
+                Q(firstname__icontains=firstname) &
+                Q(lastname__icontains=lastname)
             ).first()
 
             if patient:
                 patient.age = age
                 patient.save()
             else:
-                patient = Patient.objects.create(first_name=first_name, last_name=last_name, age=age)
+                patient = Patient.objects.create(first_name=firstname, last_name=lastname, age=age)
                 patient.radiologists.add(user)
                 patient.save()
 
             report = form.save(commit=False)
             report.patient = patient
             report.save()
-            
             return redirect('reports')  
+        else:
+            print(form.errors)
     else:
+
         form = ReportForm(request=request)
 
     return render(request, 'add_report.html', {'form': form})
@@ -609,7 +610,7 @@ def dashboard(request):
     else:
         return render(request, 'homeres.html')
     
-def upload_file(request):
+def upload(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -629,26 +630,35 @@ def upload_file(request):
 
 from django.template.loader import render_to_string
 from weasyprint import HTML
-from textextraction import classify
+from .textextraction import classify
 def process_and_generate_pdf(file_path):
     data = classify(file_path) 
     
+    report = data
+    patient = report.patient 
+
     context = {
-        'patient_name': data.patient_name,
-        'patient_age': data.patient_age,
-        'indication': data.indication,
-        'mammography_results': data.mammo,
-        'acr': data.acr,
-        'echo_results': data.echo,
-        'recommendation': data.recommendation,
-        'date': data.date,
-        'conclusion': data.conclusion,
-        'left_results': data.left,
-        'right_results': data.right,
-        'type': data.type
+        'report': {
+            'date': report.date,
+            'patient_name': patient.firstname,
+            'patient_name2': patient.lastname,
+            'patient_age': patient.age,
+            'type': report.type,
+            'indication': report.indication,
+            'recommendation': report.recommendations,
+            'leftm': report.leftM,
+            'rightm': report.rightM,
+            'bothm': report.bothM,
+            'lefte': report.leftE,
+            'righte': report.rightE,
+            'bothe': report.bothE,
+            'leftc': report.leftclassification,
+            'rightc': report.rightclassification,
+            'bothc': report.bothclassification
+        }
     }
     
-    html_string = render_to_string('report_template.html', context)
+    html_string = render_to_string('pdftemplate.html', context)
     pdf_file_path = os.path.join(settings.MEDIA_ROOT, 'output.pdf')
     HTML(string=html_string).write_pdf(pdf_file_path)
     

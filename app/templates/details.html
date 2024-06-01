@@ -1,83 +1,83 @@
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% load static %}
-        <link rel="stylesheet" href="{%static 'patient-prof.css' %}">
-        <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
-        <title>Document</title>
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="sidebar">
-                <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class="logo"></a></h2>
-                <ul>
-                    <li><a href="{% url 'reports' %}">Report</a></li>
-                    <li class="ispressed">Patients</li>
-                    <li><a href="#">Statistics</a></li>
-                    <li><a href="{%url 'messages' %}">Message</a></li>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%static 'patient-prof.css' %}">
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js" charset="utf-8"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar">
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class="logo"></a></h2>
+            <ul>
+                <li><a href="{% url 'reports' %}">Report</a></li>
+                <li class="ispressed">Patients</li>
+                <li><a href="#">Statistics</a></li>
+                <li><a href="{%url 'messages' %}">Message</a></li>
+            </ul>
+        </div>
+        <div class="main_content">
+            <div class="header">
+                <ul class="dir-link">
+                    <li><a href="{% url 'patients' %}">Patients</a> > patN°{{patient.id}}</li>
+                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
             </div>
-            <div class="main_content">
-                <div class="header">
-                    <ul class="dir-link">
-                        <li><a href="{% url 'patients' %}">Patients</a> > patN°{{patient.id}}</li>
-                        <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
-                    </ul>
-                </div>
-                <div class="page">
-                    <div class="pat-info">
-                        <div class="inf-1">
-                            <img src="image.png" alt="" class="img-pat">
-                            <h2 class="pat-name"></h2>
-                        </div>
-                        <div class="inf-2">
-                            <ul class="tabs">
-                                <li id="history-tab" class="tab">History</li>
-                                <li id="patient-data-tab" class="tab">Patient Data</li>
-                            </ul>
-                        </div>
-                        <div id="patient-data-section" class="section">
-                            <ul>
-                                <li>Name: {{patient.firstname}} {{patient.lastname}}</li>
-                                <li>Age:{{patient.age}}</li>
-                                <li>Number of reports: {{patient.num_reports}}</li>
-                                <li>Latest report: {{date}}</li>
-                                <li>
-                                    Reports:
-                                    <ul>
-                                        {% for report in reports %}
-                                        <li>
-                                            Report ID: {{ report.id }}, Radiologist:
-                                            {% if report.user and report.user.id %}
-                                            <a href="{% url 'profile' report.user.id %}">{{ report.user.username }}</a>
-                                            {% else %}
-                                            <span>{{ report.user.username }}</span>
-                                            {% endif %}
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
+            <div class="page">
+                <div class="pat-info">
+                    <div class="inf-1">
+                        <img src="image.png" alt="" class="img-pat">
+                        <h2 class="pat-name"></h2>
+                    </div>
+                    <div class="inf-2">
+                        <ul class="tabs">
+                            <li id="history-tab" class="tab">History</li>
+                            <li id="patient-data-tab" class="tab">Patient Data</li>
+                        </ul>
+                    </div>
+                    <div id="patient-data-section" class="section">
+                        <ul>
+                            <li>Name: {{patient.firstname}} {{patient.lastname}} <button class="er" id="fillFormBtn">Add Report</button></li>
+                            <li>Age:{{patient.age}}</li>
+                            <li>Number of reports: {{patient.num_reports}}</li>
+                            <li>Latest report: {{date}}</li>
+                            <li>
+                                Reports:
+                                <ul>
+                                    {% for report in reports %}
+                                    <li>
+                                        Report ID: {{ report.id }}, Radiologist:
+                                        {% if report.user and report.user.id %}
+                                        <a href="{% url 'profile' report.user.id %}">{{ report.user.username }}</a>
+                                        {% else %}
+                                        <span>{{ report.user.username }}</span>
+                                        {% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
 
-                            </ul>
-                        </div>
-                        <div id="history-section" class="section">
-                            <div class="inf-graph" id="plot-container">
-                                <script>
-                                    function handlePointClick(data) {
+                        </ul>
+                    </div>
+                    <div id="history-section" class="section">
+                        <div class="inf-graph" id="plot-container">
+                            <script>
+                                function handlePointClick(data) {
 
-                                        var pointData = data.points[0];
-                                        var xValue = pointData.x;
-                                        var yValue = pointData.y;
-                                        var label = pointData.text;
+                                    var pointData = data.points[0];
+                                    var xValue = pointData.x;
+                                    var yValue = pointData.y;
+                                    var label = pointData.text;
 
-                                        window.location.href = '/page?x=' + xValue + '&y=' + yValue + '&label=' + label;
-                                    }
-                                </script>
-                                <script>
+                                    window.location.href = '/page?x=' + xValue + '&y=' + yValue + '&label=' + label;
+                                }
+                            </script>
+                            <script>
         var reports = [
         {% for report in reports %}
         { id: {{ report.id }} },
@@ -160,14 +160,14 @@
 
 
 
-                                </script>
-                            </div>
-
+                            </script>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
-    </body>
+
+            </div>
+</body>
 </html>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -189,6 +189,19 @@
         patientDataTab.addEventListener("click", function () {
             historySection.style.display = "none";
             patientDataSection.style.display = "flex";
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#fillFormBtn').click(function() {
+            var firstName = '{{ patient.firstname }}';
+            var lastName = '{{ patient.lastname }}';
+
+            var redirectUrl = '/add_report/?firstname=' + encodeURIComponent(firstName) + '&lastname=' + encodeURIComponent(lastName);
+
+            window.location.href = redirectUrl;
         });
     });
 </script>

@@ -449,12 +449,15 @@ li {
     color: #888;
 }
 
-body div[contenteditable="true"]
-{ border: 2px solid #ccc;
-padding: 5px;
-min-height: 50px;
-width: 300px;
-outline: none;
+body div[contenteditable="true"] {
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px;
+    min-height: 50px;
+    width: 700px;
+    outline: none;
+    margin-bottom:10px;
 }
 
 #suggestedWord {

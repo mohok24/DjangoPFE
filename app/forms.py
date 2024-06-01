@@ -79,7 +79,7 @@ class EditableDivWidget(forms.Widget):
         return context
 
 class ReportForm(forms.ModelForm):
-    type = forms.CharField(widget=EditableDivWidget())
+   
 
     class Meta:
         model = Report
@@ -98,6 +98,7 @@ class ReportForm(forms.ModelForm):
             'bothclassification': EditableDivWidget(attrs={'rows': 3}),
             'conclusion': EditableDivWidget(attrs={'rows': 3}),
             'recommendations': EditableDivWidget(attrs={'rows': 3}),
+            'type': EditableDivWidget(attrs={'rows': 3}),
         }
 
     def __init__(self, *args, **kwargs):

@@ -32,12 +32,12 @@
                         {% csrf_token %}
                         <div class="inline-p">
                             <div class="part1">
-                                <label for="id_first_name">Patient First Name:</label>
-                                <input type="text" id="id_first_name" name="first_name">
-                            
+                                <label for="id_firstname">Patient First Name:</label>
+                                <input type="text" id="id_firstname" name="firstname">
 
-                                <label for="id_last_name">Patient Last Name:</label>
-                                <input type="text" id="id_last_name" name="last_name">
+
+                                <label for="id_lastname">Patient Last Name:</label>
+                                <input type="text" id="id_lastname" name="lastname">
                             </div>
                             <div class="part2">
                                 <label for="id_age">Age:</label>
@@ -47,12 +47,12 @@
                             </div>
                         </div>
                         {% for field in form %}
-                            {% if field.name != 'date' and field.name != 'user'%}
-                                <div class="form-group">
-                                    <label>{{ field.label }}</label>
-                                    {{ field }}
-                                </div>
-                            {% endif %}
+                        {% if field.name != 'date' and field.name != 'user'%}
+                        <div class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                        {% endif %}
                         {% endfor %}
                         <button type="submit">Submit</button>
                     </div>
@@ -61,7 +61,7 @@
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                 <script>
                     var typingTimer;
-                    var doneTypingInterval = 0;
+                    var doneTypingInterval = 1000;
                     var suggestedWordAdded = false;
                     $('div[contenteditable="true"]').on('input', function () {
                         clearTimeout(typingTimer);
@@ -153,7 +153,17 @@
                         }
                     }
                 </script>
-</div>
+                <script>
+                    $(document).ready(function () {
+                        var urlParams = new URLSearchParams(window.location.search);
+                        var firstname = urlParams.get('firstname');
+                        var lastname = urlParams.get('lastname');
+
+                        $('#id_firstname').val(firstname);
+                        $('#id_lastname').val(lastname);
+                    });
+                </script>
+            </div>
             </div>
             </div>
 </body>
