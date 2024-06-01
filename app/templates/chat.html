@@ -40,6 +40,22 @@
             </div>
         </div>
     </div>
-    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const textarea = document.querySelector('.inp2');
+
+        if (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto'; // Reset height to auto
+                this.style.height = this.scrollHeight + 'px'; // Set height to scrollHeight
+            });
+        }
+    });
+</script>
+
 </body>
 </html>

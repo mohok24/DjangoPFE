@@ -7,17 +7,15 @@ import numpy as np
 import re 
 class AI:
     def __init__(self, model_path):
-        with open("joined_text.txt", "r",encoding="utf-8") as file:
-            joined_text = file.read()
+        self.model = load_model(model_path)
+
+        with open("train_joined_text.txt", "r",encoding="utf-8") as file:
+            train_joined_text = file.read()
     
-        partial_text = joined_text
-        tokenizer = RegexpTokenizer(r"\w+")
-        tokens = tokenizer.tokenize(partial_text.lower())
+        self.tokenizer = RegexpTokenizer(r"\w+")
+        tokens = self.tokenizer.tokenize(train_joined_text.lower())
         self.unique_tokens = np.unique(tokens)
         self.unique_token_index = {token: index for index, token in enumerate(self.unique_tokens)}
-        self.n_words = 10
-        self.model = load_model("text_gen_model2.h5")
-        self.history = pickle.load(open("history2.p", "rb"))
         
     def preprocess(text):
         characters_to_remove = "':,0123456789"
@@ -36,11 +34,11 @@ class AI:
         print("Lowercased text:", text)
 
         words = text.split()
-        if len(words) > 10:
-            words = words[-10:]  # Keep only the last ten words
+        if len(words) > 2:
+            words = words[-2:]  
         print("Words considered for prediction:", words)
 
-        X = np.zeros((1, self.n_words, len(self.unique_tokens)))
+        X = np.zeros((1, 2, len(self.unique_tokens)))
         print("Shape of X:", X.shape)
 
         valid_words = []
@@ -55,8 +53,8 @@ class AI:
             return None 
 
         predictions = self.model.predict(X)[0]
-        top_indices = np.argpartition(predictions, -n_best)[-n_best:]
-        top_words = [self.unique_tokens[idx] for idx in top_indices]
-        return top_words
+        top_index = np.argmax(predictions)
+        top_word = self.unique_tokens[top_index]
+        return top_word
 
 

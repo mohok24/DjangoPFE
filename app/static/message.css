@@ -1,328 +1,329 @@
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    text-decoration: none;
-    font-family: 'josefin', sans-serif;
-    color:white;
-  }
-  
-  body{
-    background:#ffffff;
-  }
-  .table-container {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px; 
-  }
-  
-  .top-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 80%; 
-      margin: 0 auto; 
-  }
-  
-  .column {
-      text-align: center;
-  }
-  
-      .column h2 {
-          margin-bottom: 10px; 
-      }
-  
-  .search-button {
-      text-align: center; 
-  }
-  
-  
-  .wrapper{
-    display: flex;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .wrapper .sidebar{
-    position: fixed;
-    width: 300px;
-    height: 100%;
-    background: #192346;
-    padding: 30px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .wrapper .sidebar h2 {
-    color: #fff;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 30px;
-    position: absolute;
-    top: 30px;
-  }
-  
-  .wrapper .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .wrapper .sidebar ul li {
-    margin-top: 20px;
-    padding: 15px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    border-top: 1px solid rgba(225, 255, 255, 0.05);
-    border-radius: 20px;
-    text-align: center;
-    width: 300%;
-  }
-  
-  .wrapper .sidebar ul li a {
-    color: #bdb8d7;
-    display: block;
-  }
-  
-  p{
-    color: #bdb8d7;
-    display: block;
-  }
-  .wrapper .sidebar ul li:hover{
-    background: #525094;
-  }
-  .wrapper .sidebar ul li a:hover{
-    color:aqua;
-  }
-  
-  .wrapper .sidebar ul li.ispressed{
-    background-color: #525094;
-    color:aqua;
-  }
-  
-  .wrapper .main_content{
-    position: static;
-    margin-left: 300px;
-    width:100%;
-    height: 100%;
-  }
-  
-  .wrapper .main_content .header{
-    position: relative;
-    padding-top: 20px;
-    width: 100%;
-    height: 80px;
-    background:#0B132B;
-    color:#717171;
-    border-bottom: 1px solid #d8c5ff;
-  }
-  
-  .wrapper .main_content .header ul.dir-link{
-    list-style: none; 
-    padding: 5px;
-    margin-left: 30px;
-    margin-top: 20px;
-  }
-  
-  .wrapper .main_content .header ul.dir-link li{
-    display: inline-block;
-    margin-left: 5px;
-  }
-  
-  .wrapper .main_content .header ul.dir-link li a:hover{
-    color: #bc0808;
-  }
-  
-  .wrapper .main_content .header .prf-pic {
-    margin-left: 91%;
-    position: absolute;
-    margin-right: 5px;
-    top: 7px;
-    width: 65px;
-    height: 65px;
-    border: 3px solid #bc0808;
-    border-radius: 40px;
-  }
-  
-  .wrapper .main_content .page{
-    position: flex;
-    height:100%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .page .box::-webkit-scrollbar {
-    width: 12px;
-  }
-  
-  .page .box::-webkit-scrollbar-thumb {
-    background-color: rgba(18, 209, 59,0.5);
-    border-radius: 6px;
-  }
-  
-  .page .box::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-  
-  .page .box{
-    position: relative;
-    background-color: #1f242d;
-    width:600px;
-    margin:40px;
-    border-radius: 5px;
-    padding: 20px;
-    overflow-y: auto;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'josefin', sans-serif;
+  color:white;
+}
+
+body{
+  background:#ffffff;
+}
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px; 
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%; 
+  margin: 0 auto; 
+}
+
+.column {
+  text-align: center;
+}
+
+.column h2 {
+  margin-bottom: 10px; 
+}
+
+.search-button {
+  text-align: center; 
+}
+
+
+.wrapper{
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+}
+
+.wrapper .sidebar{
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: #192346;
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper .sidebar h2 {
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 30px;
+  position: absolute;
+  top: 30px;
+}
+
+.wrapper .sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrapper .sidebar ul li {
+  margin-top: 20px;
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-top: 1px solid rgba(225, 255, 255, 0.05);
+  border-radius: 20px;
+  text-align: center;
+  width: 300%;
+}
+
+.wrapper .sidebar ul li a {
+  color: #bdb8d7;
+  display: block;
+}
+
+p{
+  color: #bdb8d7;
+  display: block;
+}
+.wrapper .sidebar ul li:hover{
+  background: #525094;
+}
+.wrapper .sidebar ul li a:hover{
+  color:aqua;
+}
+
+.wrapper .sidebar ul li.ispressed{
+  background-color: #525094;
+  color:aqua;
+}
+
+.wrapper .main_content{
+  position: static;
+  margin-left: 300px;
+  width:100%;
+  height: 100%;
+}
+
+.wrapper .main_content .header{
+  position: relative;
+  padding-top: 20px;
+  width: 100%;
+  height: 80px;
+  background:#0B132B;
+  color:#717171;
+  border-bottom: 1px solid #d8c5ff;
+}
+
+.wrapper .main_content .header ul.dir-link{
+  list-style: none; 
+  padding: 5px;
+  margin-left: 30px;
+  margin-top: 20px;
+}
+
+.wrapper .main_content .header ul.dir-link li{
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.wrapper .main_content .header ul.dir-link li a:hover{
+  color: #bc0808;
+}
+
+.wrapper .main_content .header .prf-pic {
+  margin-left: 91%;
+  position: absolute;
+  margin-right: 5px;
+  top: 7px;
+  width: 65px;
+  height: 65px;
+  border: 3px solid #bc0808;
+  border-radius: 40px;
+}
+
+.wrapper .main_content .page{
+  display: flex;
+  margin-top: 60px;
+  height:100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.page .box::-webkit-scrollbar {
+  width: 12px;
+}
+
+.page .box::-webkit-scrollbar-thumb {
+  background-color: rgba(18, 209, 59,0.5);
+  border-radius: 6px;
+}
+
+.page .box::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.page .box{
+  position: relative;
+  background-color: #0082e963;
+  width:600px;
+  border-radius: 5px;
+  padding: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .page .box .message-detail{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 50vh;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  margin-bottom: 20px;
+}
+
+.page .box .message-detail h1,
+.page .box .message-detail ul li{
+  color:#000;
 }
 
 .message-detail h1{
-    font-size: 40px;
-    color:#007bff;
-    text-align: center;
-    margin-bottom: 20px;
-}
-  
-.message-detail form{
-  width:600px;
+  font-size: 40px;
+  color:#007bff;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.message-detail form{
+width:600px;
+text-align: center;
 }
 
 form input.inp1,
 form textarea.inp2{
-  width: 55%;
-  padding: 10px;
-  border-bottom: 10px;
-  background: transparent;
-  border: 2px solid #0ef;
-  outline: none;
-  border-radius: 6px;
-  font-size: 16px;
-  color:#ededed;
-  margin:9px 0;
+width: 55%;
+padding: 10px;
+border-bottom: 10px;
+background: transparent;
+border: 2px solid #0ef;
+outline: none;
+border-radius: 6px;
+font-size: 16px;
+color:#ededed;
+margin:9px 0;
 }
 
 form textarea.inp2{
-  width: 65%;
-  resize: none;
+width: 65%;
+resize: none;
 }
 
 form input.inp1::placeholder,
 form textarea.inp2::placeholder,
 form input.inp_image{
-  color:rgba(127, 246, 255, 0.5);
+color:rgba(127, 246, 255, 0.5);
 }
 
 form button{
-  padding: 12px 32px;
-  background: #0ef;
-  border: none;
-  outline: none;
-  border-radius: 6px;
-  box-shadow: 0 0 10px #0ef;
-  font-size: 16px;
-  color: #333;
-  letter-spacing: 1px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: .5s;
+padding: 12px 32px;
+background: #0ef;
+border: none;
+outline: none;
+border-radius: 6px;
+box-shadow: 0 0 10px #0ef;
+font-size: 16px;
+color: #333;
+letter-spacing: 1px;
+font-weight: 600;
+cursor: pointer;
+margin-top: 20px;
+transition: .5s;
 }
 
 form button:hover{
-  box-shadow: none;
+box-shadow: none;
 }
-  
-  /* patient.css */
-  
-  /* Add border to <strong> elements and adjacent content */
-  strong {
-      display: inline-block; /* Ensure borders wrap around the content */
-      border: 1px solid #000; /* You can adjust the border style and color as needed */
-      padding: 5px; /* Optional: Add padding for better visual */
-      margin-bottom: 5px; /* Add spacing between each group of strong element and adjacent content */
-  }
-  
-  .message-detail div {
-      border: 1px solid black;
-      padding: 5px;
-      margin-bottom: 10px; /* Optional: Add some spacing between each pair */
-  }
-  .test {
-          border:1px solid #000;
-      }
-  button {
-      padding: 8px 16px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 2px;
-      margin-bottom: 2px;
-  }
-  
-      button:hover {
-          background-color: #0056b3;
-      }
-  .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      margin: 10px;
-      border: 2px solid #333;
-      border-radius: 5px;
-      background-color: #007bff;
-      color: #fff;
-      text-decoration: none;
-      font-size: 16px;
-      cursor: pointer;
-  }
-  
-      .btn:hover {
-          background-color: #0056b3;
-      }
-  
-  
-      .btn:focus {
-          outline: none;
-          background-color: #0056b3;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      }
-      .box .ispressed {
-      display: inline-block;
-      padding: 10px 20px;
-      margin: 10px;
-      border: 2px solid #333;
-      border-radius: 5px;
-      background-color: #333;
-      color: #fff;
-      text-decoration: none;
-      font-size: 16px;
-      cursor: pointer;
-  }
-      textarea{
-          color:black;
-      }
-      input{
-          color:black;
-      }
 
-.dir-link li:first-child {
-    padding-right: 70%;
+/* patient.css */
+
+/* Add border to <strong> elements and adjacent content */
+strong {
+    display: inline-block; /* Ensure borders wrap around the content */
+    border: 1px solid #000; /* You can adjust the border style and color as needed */
+    padding: 5px; /* Optional: Add padding for better visual */
+    margin-bottom: 5px; /* Add spacing between each group of strong element and adjacent content */
 }
+
+.message-detail div {
+    border: 1px solid black;
+    padding: 5px;
+    margin-bottom: 10px; /* Optional: Add some spacing between each pair */
+}
+.test {
+        border:1px solid #000;
+    }
+button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+    button:hover {
+        background-color: #0056b3;
+    }
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+
+    .btn:focus {
+        outline: none;
+        background-color: #0056b3;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .box .ispressed {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+    textarea{
+        color:black;
+    }
+    input{
+        color:black;
+    }

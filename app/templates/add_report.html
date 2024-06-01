@@ -11,7 +11,7 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class="logo"></a></h2>
             <ul>
                 <li><a href="{% url 'reports' %}">Report</a></li>
                 <li class="ispressed">Patient</li>
@@ -28,17 +28,34 @@
             </div>
             <div class="page">
                 <form id="myForm" method="post">
-                    {% csrf_token %}
-                    <label for="id_first_name">Patient First Name:</label>
-                    <input type="text" id="id_first_name" name="first_name">
+                    <div class="box1">
+                        {% csrf_token %}
+                        <div class="inline-p">
+                            <div class="part1">
+                                <label for="id_first_name">Patient First Name:</label>
+                                <input type="text" id="id_first_name" name="first_name">
+                            
 
-                    <label for="id_last_name">Patient Last Name:</label>
-                    <input type="text" id="id_last_name" name="last_name">
-
-                    <label for="id_age">Age:</label>
-                    <input type="number" id="id_age" name="age">
-                    {{ form.as_p }}
-                    <button type="submit">Submit</button>
+                                <label for="id_last_name">Patient Last Name:</label>
+                                <input type="text" id="id_last_name" name="last_name">
+                            </div>
+                            <div class="part2">
+                                <label for="id_age">Age:</label>
+                                <input type="number" id="id_age" name="age">
+                                <label>{{ form.date.label }}:</label>
+                                {{form.date}}
+                            </div>
+                        </div>
+                        {% for field in form %}
+                            {% if field.name != 'date' and field.name != 'user'%}
+                                <div class="form-group">
+                                    <label>{{ field.label }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <button type="submit">Submit</button>
+                    </div>
                 </form>
 
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

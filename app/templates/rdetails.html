@@ -5,68 +5,87 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{%static 'rep-prof.css' %}">
+    <link rel="stylesheet" href="{% static 'rep-prof.css' %}">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <title>Document</title>
 </head>
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class="logo"></a></h2>
             <ul>
                 <li class="ispressed">Report</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
                 <li><a href="#">Statistics</a></li>
-                <li><a href="{%url 'messages' %}">Message</a></li>
+                <li><a href="{% url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a href="{% url 'reports' %}">Reports</a>> N {{report.id}}</li>
-                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
+                    <li><a href="{% url 'reports' %}">Reports</a> > N {{ report.id }}</li>
+                    <li><a href="{% url 'profile' request.user.id %}">{{ request.user.username }} (logged in!)</a><a href="{% url 'logout' %}">log out?</a></li>
                 </ul>
-                
             </div>
             <div class="page">
                 <div class="inf-2">
                     <h1>Report Details</h1>
-
-                    <h3>Report ID: repN{{report.id}}</h3>
-
-                    <p class="title">Date: {{ report.date }}</p>
-                    <p class="title">Type: {{ report.type }}</p>
-                    <p class="title">Indication: {{ report.indication }}</p>
-                    <p class="title">ACR: {{report.acr}} </p>
-                    <h3>Mammogram Information</h3>
-                    <div>
-                        <p class="title">Left: </p><p>{{ report.leftM }}</p>
-                        <p class="title">Right: </p><p>{{ report.rightM }}</p>
-                        <p class="title">Both: </p><p>{{ report.bothM }}</p>
-                    </div>
-
-                    <h3>Ultrasound Information</h3>
-                    <div>
-                        <p class="title">Left: </p><p>{{ report.leftE }}</p>
-                        <p class="title">Right: </p><p>{{ report.rightE }}</p>
-                        <p class="title">Both: </p><p>{{ report.bothE }}</p>
-                    </div>
-
-                    <h3>Classification Information</h3>
-                    <div>
-                        <p class="title">Left: </p><p>{{ report.leftclassification }}</p>
-                        <p class="title">Right: </p><p>{{ report.rightclassification }}</p>
-                        <p class="title">Both: </p><p>{{ report.bothclassification }}</p>
-                    </div>
-                    <h2>Conclusion</h2>
-                    <div>
-
-                        <p>{{ report.conclusion }}</p>
-                    </div>
-                    <h2>Recommendations</h2>
-                    <div>
-
-                        <p>{{ report.recommendations }}</p>
+                    <div class="head-title">
+                        <div class="report-header">
+                            <h2>Report ID: {{ report.id }}</h2>
+                            <p class="title">Date: {{ report.date }}</p>
+                        </div>
+                        <div class="border">
+                            <h2>{{ report.type }}</h2>
+                            <p class="title">Name: {{ report.patient.firstname }} {{ report.patient.lastname }}</p>
+                            <p class="title">Age: {{ report.patient.age }}</p>
+                            <p class="title">Indication: {{ report.indication }}</p>
+                            <p class="title">ACR: {{ report.acr }}</p>
+                        </div>
+                        {% if report.leftM or report.rightM or report.bothM %}
+                        <div class="border">
+                            <h2>Mammogram</h2>
+                            <div>
+                                {% if report.leftM %}<p class="title-2">Left: </p><p>{{ report.leftM }}</p>{% endif %}
+                                {% if report.rightM %}<p class="title-2">Right: </p><p>{{ report.rightM }}</p>{% endif %}
+                                {% if report.bothM %}<p class="title-2">Both: </p><p>{{ report.bothM }}</p>{% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if report.leftE or report.rightE or report.bothE %}
+                        <div class="border">
+                            <h2>Ultrasound</h2>
+                            <div>
+                                {% if report.leftE %}<p class="title-2">Left: </p><p>{{ report.leftE }}</p>{% endif %}
+                                {% if report.rightE %}<p class="title-2">Right: </p><p>{{ report.rightE }}</p>{% endif %}
+                                {% if report.bothE %}<p class="title-2">Both: </p><p>{{ report.bothE }}</p>{% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if report.leftclassification or report.rightclassification or report.bothclassification %}
+                        <div class="border">
+                            <h2>Classification</h2>
+                            <div>
+                                {% if report.leftclassification %}<p class="title-2">Left: </p><p>{{ report.leftclassification }}</p>{% endif %}
+                                {% if report.rightclassification %}<p class="title-2">Right: </p><p>{{ report.rightclassification }}</p>{% endif %}
+                                {% if report.bothclassification %}<p class="title-2">Both: </p><p>{{ report.bothclassification }}</p>{% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if report.conclusion %}
+                        <div class="border">
+                            <h2 class="title-3">Conclusion:</h2>
+                            <div>
+                                <p>{{ report.conclusion }}</p>
+                            </div>
+                            {% if report.recommendations %}
+                            <h3 class="title-2">Recommendations:</h3>
+                            <div>
+                                <p>{{ report.recommendations }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

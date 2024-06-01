@@ -40,6 +40,11 @@ body {
             top: 30px;
         }
 
+        .wrapper .sidebar h2 a img.logo{
+            width:250px;
+            height: 150px;
+        }
+
         .wrapper .sidebar ul {
             list-style: none;
             padding: 0;

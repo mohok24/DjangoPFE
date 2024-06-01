@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medical Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 15px;
+        }
+        .section h2 {
+            background-color: #f2f2f2;
+            padding: 5px;
+        }
+        .content {
+            padding-left: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Medical Report</h1>
+        <p>Date: {{ report.date }}</p>
+    </div>
+    <div class="section">
+        <h2>Patient Information</h2>
+        <div class="content">
+            <p><strong>Name:</strong> {{ report.patient_name }}</p>
+            <p><strong>Age:</strong> {{ report.patient_age }}</p>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Details</h2>
+        <div class="content">
+            <p><strong>Type:</strong> {{ report.type }}</p>
+            <p><strong>Indication:</strong> {{ report.indication }}</p>
+            <p><strong>Recommendation:</strong> {{ report.recommendation }}</p>
+            <p><strong>Left Mammography:</strong> {{ report.leftm }}</p>
+            <p><strong>Right Mammography:</strong> {{ report.rightm }}</p>
+            <p><strong>Both Mammography:</strong> {{ report.bothm }}</p>
+            <p><strong>Left Echography:</strong> {{ report.lefte }}</p>
+            <p><strong>Right Echography:</strong> {{ report.righte }}</p>
+            <p><strong>Both Echography:</strong> {{ report.bothe }}</p>
+            <p><strong>Left Classification:</strong> {{ report.leftc }}</p>
+            <p><strong>Right Classification:</strong> {{ report.rightc }}</p>
+            <p><strong>Both Classification:</strong> {{ report.bothc }}</p>
+        </div>
+    </div>
+</body>
+</html>

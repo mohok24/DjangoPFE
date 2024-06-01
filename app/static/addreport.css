@@ -57,6 +57,11 @@ body {
         align-items: center;
     }
 
+    .wrapper .sidebar h2 a img.logo{
+        width:250px;
+        height: 150px;
+    }
+
         .wrapper .sidebar h2 {
             color: #fff;
             text-transform: uppercase;
@@ -154,7 +159,7 @@ p {
         }
 
     .wrapper .main_content .page {
-        position: relative;
+        position: absolute;
     }
 
 .page .box::-webkit-scrollbar {
@@ -170,15 +175,98 @@ p {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.page .box {
-    position: relative;
-    overflow:auto;
-    background-color: #a3a3a3;
-    min-width: 300px;
+.page form div.box1 {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: #d5dcff;
+    width: 800px;
     margin: 40px;
     border-radius: 5px;
     padding: 20px;
     flex-basis: 80%;
+    padding: 50px 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.box1 .inline-p {
+    display: flex;  
+    vertical-align: top;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.inline-p .part1,
+.inline-p .part2 {
+    flex: 50%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.inline-p .part1 label,
+.inline-p .part2 label{
+    font-weight: 500;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.inline-p .part1 input,
+.inline-p .part2 input{
+    padding: 5px;
+    width: 70%;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #000;
+}
+
+.inline-p .part label{
+    text-align:left;
+    margin-left: 5px;
+}
+
+.inline-p .part1 input{
+    align-self:flex-end;
+    margin-right: 5px;
+}
+.inline-p .part2 input{
+    align-self:flex-start;
+    margin-left: 5px;
+}
+
+.box1 .form-group{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.box1 .form-group label{
+    font-weight: 500;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.box1 .form-group .form-control{
+    padding: 5px;
+    width: 600px;
+    min-height: 80px;
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.box1 .form-group .form-control2,
+.box1 .form-group #id_type{
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 5px;
+    width: 600px;
 }
 
 .box .list {

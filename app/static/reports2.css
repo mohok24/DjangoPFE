@@ -318,7 +318,10 @@ button {
         background-color: #0056b3;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
-
+    .wrapper .sidebar h2 a img.logo {
+        width: 250px;
+        height: 150px;
+    }
 .box .ispressed {
     display: inline-block;
     padding: 10px 20px;

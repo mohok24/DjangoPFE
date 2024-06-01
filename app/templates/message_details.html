@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'patient.css' %}">
+    <link rel="stylesheet" href="{% static 'message-det.css' %}">
     <title>Document</title>
 </head>
 <body>
@@ -28,8 +28,10 @@
             </div>
             <div class="page">
                 <div class="box">
-                    <h1>Message Details</h1>
-                    <button><a href="{% url 'messages' %}">Return</a></button>
+                    <div class="header-box">
+                        <h1>Message Details</h1>
+                        <button><a href="{% url 'messages' %}">Return</a></button>
+                    </div>
                     <div class="message-detail">
                         <div>
                             <strong>From:</strong> {{ message.sender }}
@@ -49,7 +51,7 @@
                             <strong>Content:</strong><br>
                             {{ message.content }}
                         </div>
-                        <div>
+                        <div class="buttons">
                             <button onclick="deleteMessage({{ message.id }})">Delete</button>
                             <button onclick="replyMessage('{{ message.sender }}')">Reply</button>
                         </div>

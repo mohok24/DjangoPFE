@@ -135,35 +135,89 @@ p {
 }
 
 .page {
+    display: flex;
     height: 100%;
-    width: 100%;
+    width: 95%;
+    margin:40px;
+    justify-content: center;
+    align-items: center;
 }
 
 
 .inf-2 {
-    margin-left:20px;
-    margin-right:20px;
+    margin-left: 20px;
+    margin-right: 20px;
     margin-top: 80px;
+    width: 80%;
 }
 
 .page div {
-    border: 1px solid black;
     color: black;
-    border-radius: 10px;
     padding: 3px;
     margin-bottom: 4px;
 }
 
-h1,h3{
+h1,h3,h2{
     color:black;
     text-align:center;
 }
 h2{
     color:black;
 }
+
+div.inf-2{
+    border:2px solid black;
+    border-radius: 10px;
+    background-color: #e5e0ff;
+    padding-top: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.report-header h3 {
+    margin: 0;
+}
+
+.report-header p.title {
+    margin: 0;
+}
+
 .title{
     font-size:20px;
+    margin-bottom:10px;
 }
+
+.title-2 {
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 5px;
+    width: 250px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.title-3{
+    align-self: center;
+}
+
+.border{
+    background-color: #f0e5ff;
+    border-radius: 5px;
+    margin-top:55px;
+    padding: 30px;
+}
+
 .dir-link li:first-child {
     padding-right: 50%;
+}
+.wrapper .sidebar h2 a img.logo {
+    width: 250px;
+    height: 150px;
 }

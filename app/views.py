@@ -1,7 +1,7 @@
 """
 Definition of views.
 """
-
+import os
 from asyncio.windows_events import NULL
 from datetime import datetime
 from site import ENABLE_USER_SITE
@@ -17,13 +17,14 @@ from django.db.models import Q
 from .models import Patient,Report
 from django.http import JsonResponse
 from app.models import Message
-from .forms import ReportForm, ReportSearchForm,PatientSearchForm
+from .forms import ReportForm, ReportSearchForm,PatientSearchForm,UploadFileForm
 from django.db.models import Max
 from app.ai_model import AI
-
 import re
+from docx import Document
+from django.conf import settings
 
-ai=AI(model_path="text_gen_model2.h5")
+ai=AI(model_path="threewordtest.h5")
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
@@ -561,23 +562,19 @@ def add_report(request):
             age = form.cleaned_data['age']
             user = request.user
 
-            # Look for existing patient
             patient = Patient.objects.filter(
                 Q(first_name__icontains=first_name) &
                 Q(last_name__icontains=last_name)
             ).first()
 
             if patient:
-                # Update patient's age if found
                 patient.age = age
                 patient.save()
             else:
-                # Create a new patient if not found
                 patient = Patient.objects.create(first_name=first_name, last_name=last_name, age=age)
                 patient.radiologists.add(user)
                 patient.save()
 
-            # Create the report
             report = form.save(commit=False)
             report.patient = patient
             report.save()
@@ -605,9 +602,54 @@ def homerad(request):
 def dashboard(request):
     role = request.user.role
     
-    if role == 'radiologist':
+    if role == 'Radiologist':
         return render(request, 'homerad.html')
-    elif role == 'researcher':
+    elif role == 'Researcher':
         return render(request, 'homeres.html')
     else:
         return render(request, 'homeres.html')
+    
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            file_path = os.path.join(settings.MEDIA_ROOT, file.name)
+            with open(file_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            pdf_path = process_and_generate_pdf(file_path)
+            with open(pdf_path, 'rb') as pdf_file:
+                response = HttpResponse(pdf_file.read(), content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="output.pdf"'
+                return response
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
+
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from textextraction import classify
+def process_and_generate_pdf(file_path):
+    data = classify(file_path) 
+    
+    context = {
+        'patient_name': data.patient_name,
+        'patient_age': data.patient_age,
+        'indication': data.indication,
+        'mammography_results': data.mammo,
+        'acr': data.acr,
+        'echo_results': data.echo,
+        'recommendation': data.recommendation,
+        'date': data.date,
+        'conclusion': data.conclusion,
+        'left_results': data.left,
+        'right_results': data.right,
+        'type': data.type
+    }
+    
+    html_string = render_to_string('report_template.html', context)
+    pdf_file_path = os.path.join(settings.MEDIA_ROOT, 'output.pdf')
+    HTML(string=html_string).write_pdf(pdf_file_path)
+    
+    return pdf_file_path

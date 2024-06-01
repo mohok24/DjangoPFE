@@ -106,3 +106,6 @@ class ReportForm(forms.ModelForm):
         if self.request and self.request.user:
             self.fields['user'].initial = self.request.user
             self.fields['user'].widget = forms.HiddenInput()
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField(label='Upload DOCX File')

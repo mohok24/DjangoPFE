@@ -50,7 +50,7 @@ urlpatterns = [
     path('homeres/',views.homeres,name='homeres'),
     path('homerad/',views.homerad,name='homerad'),
     path('dashboard/', views.dashboard, name='dashboard'),
-
+    path('upload/',views.upload,name='upload')
 
 ]
 

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     {% load static %}
-    <link rel="stylesheet" href="{%static 'stat.css'%}">
+    <link rel="stylesheet" href="{% static 'stat.css' %}">
     <title>Document</title>
 </head>
 <body>
@@ -14,8 +14,8 @@
         <div class="sidebar">
             <h2>Statistics</h2>
             <ul>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Patients</a></li>
+                <li><a href="#">Report</a></li>
+                <li><a href="#">Patient</a></li>
                 <li class="ispressed">Statistics</li>
             </ul>
         </div>
@@ -32,338 +32,418 @@
                     <div class="main-title">
                         <h2>DASHBOARD</h2>
                     </div>
-
                     <div class="main-cards">
-
                         <!-- card 1 -->
                         <div class="card">
                             <div class="card-inner">
-                                <h3>Selected Time Range: {{ time_range_g1 }}</h3>
+                                <h3>Select Graph:</h3>
                             </div>
-
-                            <form method="GET" action="{% url 'statistics' %}">
-                                <label for="time_range_g1">Select time range:</label>
-                                <select name="time_range_g1" id="time_range_g1">
-                                    <option value="all_time">All Time</option>
-                                    <option value="past_week">Past Week</option>
-                                    <option value="past_month">Past Month</option>
-                                    <option value="past_year">Past Year</option>
-                                </select>
-                                <button type="submit">Submit</button>
+                            <form id="form1" method="GET" action="{% url 'statistics' %}">
+                                <input type="radio" id="graph1" name="graph" value="graph1">
+                                <label for="graph1">graph 1</label><br>
+                                <input type="radio" id="graph2" name="graph" value="graph2">
+                                <label for="graph2">graph 2</label><br>
                             </form>
-
                             <div class="card-inner">
-                                <h3>Selceted Graph Type: {{ graph1_type }}</h3>
+                                <h3>Graph Type:</h3>
                             </div>
-
                             <form method="GET" action="{% url 'statistics' %}">
-                                <label for="graph1_type">Select graph type:</label>
-                                <select name="graph1_type" id="graph1_type">
+                                <select name="graph_type" id="graph_type">
                                     <option value="pie">pie chart</option>
                                     <option value="hist">histogram</option>
                                     <option value="scatt">scatter plot</option>
                                 </select>
-                                <button type="submit">Submit</button>
                             </form>
-
                         </div>
-
                         <!-- card 2 -->
-
                         <div class="card">
                             <div class="card-inner">
-                                <h3>the studied aria: {{ b_aria_g1 }}</h3>
+                                <h3>x_values:</h3>
                             </div>
-
-                            <form method="GET" action="{% url 'statistics' %}">
-                                <label for="b_aria_g1">celect aria:</label>
-                                <select name="b_aria_g1" id="b_aria_g1">
-                                    <option value="right">right</option>
-                                    <option value="left">left</option>
-                                    <option value="both">both</option>
-                                    <option value="all">all</option>
-                                </select>
-                                <button type="submit">Submit</button>
+                            <form id="form2" method="GET" action="{% url 'statistics' %}">
+                                <input type="radio" id="time" name="x_val" value="time">
+                                <label for="time">time</label><br>
+                                <input type="radio" id="stt" name="x_val" value="stt">
+                                <label for="stt">Acr type/bi-rad levels</label><br>
                             </form>
-
                             <div class="card-inner">
-                                <h3>Average age of patients:</h3>
+                                <h3>Area studied:</h3>
                             </div>
-                            <h1>{% if avg_age %}{{ avg_age|floatformat:1 }}{% else %}N/A{% endif %}</h1>
-
+                            <form method="GET" action="{% url 'statistics' %}">
+                                <input type="checkbox" id="left" name="area" value="left">
+                                <label for="left">left</label><br>
+                                <input type="checkbox" id="right" name="area" value="right">
+                                <label for="right">right</label><br>
+                                <input type="checkbox" id="both" name="area" value="both">
+                                <label for="both">both</label><br>
+                            </form>
+                            <div class="card-inner">
+                                <h3>Bi_rad/ACR:</h3>
+                            </div>
+                            <form id="form3" method="GET" action="{% url 'statistics' %}">
+                                <input type="radio" id="birad" name="acr_brad" value="birad">
+                                <label for="birad">bi_rad</label><br>
+                                <input type="radio" id="acr" name="acr_brad" value="acr">
+                                <label for="acr">acr</label><br>
+                            </form>
                         </div>
-
-                        <!--card 3-->
-
+                        <!-- card 3 -->
                         <div class="card">
                             <div class="card-inner">
-                                <h3>Selected Time Range: {{ time_range_g2 }}</h3>
+                                <h3>Selected Time Range:</h3>
                             </div>
-
-                            <form method="GET" action="{% url 'statistics' %}">
-                                <label for="time_range_g2">Select time range:</label>
-                                <select name="time_range_g2" id="time_range_g2">
-                                    <option value="all_time">All Time</option>
-                                    <option value="past_week">Past Week</option>
-                                    <option value="past_month">Past Month</option>
-                                    <option value="past_year">Past Year</option>
-                                </select>
-                                <button type="submit">Submit</button>
+                            <form id="form4" method="GET" action="{% url 'statistics' %}">
+                                <div class="forminput">
+                                    <div class="field">
+                                      <span>Min</span>
+                                      <input type="date" class="date-min" name="date_min">
+                                    </div>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                      <span>Max</span>
+                                      <input type="date" class="date-max" name="date_max">
+                                    </div>
+                                </div>
                             </form>
-
-                            <div class="card-inner">
-                                <h3>Selceted Graph Type: {{ graph2_type }}</h3>
-                            </div>
-
-                            <form method="GET" action="{% url 'statistics' %}">
-                                <label for="graph2_type">Select graph type:</label>
-                                <select name="graph2_type" id="graph2_type">
-                                    <option value="pie">pie chart</option>
-                                    <option value="hist">histogram</option>
-                                    <option value="scatt">scatter plot</option>
-                                </select>
-                                <button type="submit">Submit</button>
-                            </form>
-
                         </div>
-
                         <!-- card 4 -->
-
                         <div class="card">
                             <div class="card-inner">
-                                <h3>the studied aria: {{ b_aria_g2 }}</h3>
+                                <h3>Age Range:</h3>
                             </div>
-
                             <form method="GET" action="{% url 'statistics' %}">
-                                <label for="b_aria_g2">celect aria:</label>
-                                <select name="b_aria_g2" id="b_aria_g2">
-                                    <option value="right">right</option>
-                                    <option value="left">left</option>
-                                    <option value="both">both</option>
-                                    <option value="all">all</option>
-                                </select>
-                                <button type="submit">Submit</button>
+                                <div class="price-input">
+                                    <div class="field">
+                                      <span>Min</span>
+                                      <input type="number" class="input-min" name="age_min" id="age_min">
+                                    </div>
+                                    <div class="separator">-</div>
+                                    <div class="field">
+                                      <span>Max</span>
+                                      <input type="number" class="input-max" name="age_max" id="age_max">
+                                    </div>
+                                </div>
                             </form>
-
-                            <div class="card-inner">
-                                <h3>Average age of patients:</h3>
-                            </div>
-                            <h1>{% if avg_age %}{{ avg_age|floatformat:1 }}{% else %}N/A{% endif %}</h1>
-
                         </div>
-
+                        <div class="card">
+                            <div class="card-inner">
+                                <button type="button" onclick="submitAllForms()">Generate Plot</button>
+                            </div>
+                        </div>
                     </div>
-
                     <div class="charts">
-
                         <div class="charts-card">
                             <h2 class="chart-title">graph1</h2>
                             <div id="bar-chart">
                                 <script>
-                              var graphType = document.getElementById("graph1_type").value;
-                              var timeRange = document.getElementById("time_range_g1").value;
-                              var b_aria = document.getElementById("b_aria_g1").value;
-                                                                  switch (b_aria) {
-                                        case 'right':
-                                            var y_values = [
-                                                {% for report in reports_g1 %}
-                                                    {{ report.rightclassification }},
-                                                {% endfor %}
-                                            ];
-                                            var g1 = per_plot(y_values, graph1_type);
-                                            Plotly.newPlot('plot-container', g1.data, g1.layout);
-                                            break;
+                                    window.onload = function() {
+                                        console.log("hi world");
+                                        var urlParams = new URLSearchParams(window.location.search);
 
-                                        case 'left':
-                                            var y_values = [
-                                                {% for report in reports_g1 %}
-                                                    {{ report.leftclassification }},
-                                                {% endfor %}
-                                            ];
-                                            var g1 = per_plot(y_values, graph1_type);
-                                            Plotly.newPlot('plot-container', g1.data, g1.layout);
-                                            break;
+                                        // Extract values from the URL
+                                        var SG = urlParams.get("graph_type");
 
-                                        case 'both':
-                                            var y_values = [
-                                                {% for report in reports_g1 %}
-                                                    {{ report.bothclassification }},
-                                                {% endfor %}
-                                            ];
-                                            var g1 = per_plot(y_values, graph1_type);
-                                            Plotly.newPlot('plot-container', g1.data, g1.layout);
-                                            break;
+                                        var areaParams = urlParams.getAll("area");
+                                        var leftChecked = areaParams.includes("left");
+                                        var rightChecked = areaParams.includes("right");
+                                        var bothChecked = areaParams.includes("both");
+                                        var graph = urlParams.get('graph');
+                                        var Ch_stt = document.getElementById("stt").value;
+                                        var Ch_t = document.getElementById("time").value;
+                                        var x_valParams = urlParams.getAll("x_val");
+                                        var Ch_sttChecked = x_valParams.includes("stt");
+                                        var Ch_tChecked = x_valParams.includes("time");
 
-                                        case 'all':
-                                            var yr_values = [
-                                                {% for report in reports_g1 %}
-                                                    {{ report.rightclassification }},
-                                                {% endfor %}
-                                            ];
-                                            var yl_values = [
-                                                {% for report in reports_g1 %}
-                                                    {{ report.leftclassification }},
-                                                {% endfor %}
-                                            ];
-                                            var yb_values = [
-                                                {% for report in reports_g1 %}
-                                                    {{ report.bothclassification }},
-                                                {% endfor %}
-                                            ];
-                                            break;
+                                        
+                                        //check area studied
+                                        var pltright = {data: null, layout: null};
+                                        var pltleft = {data: null, layout: null};
+                                        var pltboth = {data: null, layout: null};
+                                        if(rightChecked){
+                                            var val_r = JSON.parse('{{ classified_data_r|escapejs }}');
+                                            if(Ch_tChecked)
+                                                pltright = per_plot(val_r, Ch_t, SG);
+                                            else {
+                                                if (Ch_sttChecked) {
+                                                    pltright = per_plot(val_r, Ch_stt, SG);
+                                                }
+                                            }
+                                        }
+                                        if(leftChecked){
+                                            var val_l = JSON.parse('{{ classified_data_l|escapejs }}');
+                                            if(Ch_tChecked)
+                                                pltleft = per_plot(val_l, Ch_t, SG);
+                                            else {
+
+                                                if (Ch_sttChecked) {
+                                                    pltleft = per_plot(val_l, Ch_stt, SG);
+                                                }
+                                            }
+                                        }
+                                        if(bothChecked){
+                                            var val_b = JSON.parse('{{ classified_data_b|escapejs }}');
+                                            if(Ch_tChecked){
+                                                pltboth = per_plot(val_b, Ch_t, SG);
+                                            }else {
+                                                if (Ch_sttChecked) {
+                                                    pltboth = per_plot(val_b, Ch_stt, SG);
+                                                }
+                                            }
+                                        }
+                                        console.log("result:",pltboth.data," \n and:", pltboth.layout)
+                                        var combinedData = [];
+                                        if (pltright.data) combinedData = combinedData.concat(pltright.data);
+                                        if (pltleft.data) combinedData = combinedData.concat(pltleft.data);
+                                        if (pltboth.data) combinedData = combinedData.concat(pltboth.data);
+                                        var combinedLayout = pltright.layout || pltleft.layout || pltboth.layout;
+                                        console.log("x val:", combinedData)
+                                        if(graph==='graph2'){
+                                            Plotly.newPlot('area-chart', combinedData, combinedLayout);
+                                        }else{
+                                            Plotly.newPlot('bar-chart', combinedData, combinedLayout);
+                                        }
                                     }
-
-
-                                  var g1r=per_plot(yr_values,graph1_type);
-                                  var g1l=per_plot(yl_values,graph1_type);
-                                  var g1b=per_plot(yb_values,graph1_type);
-
-                                  var combinedData = g1r.data.concat(g1l.data, g1b.data);
-                                  var combinedLayout = Object.assign({}, g1r.layout);
-
-                                  Plotly.newPlot('plot-container', combinedData, combinedLayout);
-                                break;
-                              }
                                 </script>
                             </div>
                         </div>
-
                         <div class="charts-card">
                             <h2 class="chart-title">graph2</h2>
                             <div id="area-chart">
-                                <script>
-                                    //Plotly.newPlot('plot-container', data, layout);
-                                </script>
                             </div>
                         </div>
-
+                        <div class="main-cards">
+                            <!--card 1-->
+                            <div class="card"> 
+                                <div class="card-inner">
+                                    <h3>keyword search:</h3>
+                                    <form id="form5" method="GET" action="{%url 'statistics'%}">
+                                        <input type="text" name="keyword" id="keyword" >
+                                        <button type="submit">submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!--card 2-->
+                            <div class="card">
+                                <div class="card-inner">
+                                    <h3>your word"":</h3>
+                                    <h4>was found in <span id="result-count">0</span>reports</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="main-cards">
-
-                        <!-- card1 -->
-                        <div class="card">
-                            <div class="card-inner">
-                                <h3>Selected Time Range: {{ time_range }}</h3>
-                            </div>
-
-                            <form method="GET" action="{% url 'statistics' %}">
-                                <label for="time_range">Select time range:</label>
-                                <select name="time_range" id="time_range">
-                                    <option value="all_time">All Time</option>
-                                    <option value="past_week">Past Week</option>
-                                    <option value="past_month">Past Month</option>
-                                    <option value="past_year">Past Year</option>
-                                </select>
-                                <button type="submit">Submit</button>
-                            </form>
-                        </div>
-
-                        <!-- card 2-->
-
-                        <div class="card">
-                            <div class="card-inner">
-                                <h3>Number of patients:</h3>
-                            </div>
-                            <h1>{{ num_patients }}</h1>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-inner">
-                                <h3>Number of reports available:</h3>
-                            </div>
-                            <h1>{{ num_reports }}</h1>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-inner">
-                                <h3>Average age of patients:</h3>
-                            </div>
-                            <h1>{% if avg_age %}{{ avg_age|floatformat:1 }}{% else %}N/A{% endif %}</h1>
-                        </div>
-
-                    </div>
-
                 </main>
             </div>
         </div>
-
     </div>
     <script>
-        function per_plot(y_value, graphType) {
-            var countMap = {};
-            y_value.forEach(function (value) {
-                countMap[value] = (countMap[value] || 0) + 1;
-            });
+        function per_plot(val, ch, SG) {
+            var Ch_t = document.getElementById("time").value;
 
-            var labels = Object.keys(countMap).sort();
-
-            var values = labels.map(function (label) {
-                return countMap[label];
-            });
-
-            if (graphType == 'pie') {
-                /*var countMap = {};
-                y_value.forEach(function(value) {
-                  countMap[value] = (countMap[value] || 0) + 1;
-                });
-
-                var labels = Object.keys(countMap).sort();
-
-                var values = labels.map(function(label) {
-                  return countMap[label];
-                });*/
-
-                var data = [{
-                    values: values,
-                    labels: labels,
-                    type: 'pie'
-                }];
-                var layout = {
-                    title: 'Pie Chart',
-                };
+            var typeValuesSet = new Set();
+            for (var year in val) {
+                if (val.hasOwnProperty(year)) {
+                    for (var type in val[year]) {
+                        if (val[year].hasOwnProperty(type)) {
+                            typeValuesSet.add(type);
+                        }
+                    }
+                }
             }
 
-            else if (graphType == 'hist') {
-                /*var countMap = {};
-                y_value.forEach(function(value) {
-                  countMap[value] = (countMap[value] || 0) + 1;
-                });
+            var typeValues = Array.from(typeValuesSet);
 
-                var labels = Object.keys(countMap).sort();
-
-                var values = labels.map(function(label) {
-                  return countMap[label];
-                });*/
-
+            if(SG==='pie'){
+                
+                var type0 = 0;
+                var type1 = 0;
+                var type2 = 0;
+                var type3 = 0;
+                var type4 = 0;
+                var type5 = 0;
+                var type6 = 0;
+                for (var year in val) {
+                    
+                    console.log("year classifying:", year);
+                    for(i=0;i<5;i++){
+                        console.log("val[",year,"][",typeValues[i],"]:",val[year][typeValues[i]]);
+                    }
+                    type0 += val[year][typeValues[0]] || 0;
+                    type1 += val[year][typeValues[1]] || 0;
+                    type2 += val[year][typeValues[2]] || 0;
+                    type3 += val[year][typeValues[3]] || 0;
+                    type4 += val[year][typeValues[4]] || 0;
+                    type5 += val[year][typeValues[5]] || 0;
+                    type6 += val[year][typeValues[6]] || 0;
+                }
                 var data = [{
-                    x: labels,
-                    y: values,
-                    type: 'bar'
+                    values: [type0, type1, type2, type3, type4, type5, type6],
+                    labels: [typeValues[0], typeValues[1], typeValues[2], typeValues[3], typeValues[4], typeValues[5], typeValues[6]],
+                    type: SG
                 }];
-                var layout = {
-                    title: 'Histogram',
-                    xaxis: { title: 'xaxis' },
-                    yaxis: { title: 'yasis' }
-                };
+                var layout = { title: 'plot1' };
+                return {data: data, layout: layout};
             }
+            else{ 
+                if(ch===Ch_t){
+                    console.log("entered ch_time")
+                    // Collect all unique years
+                    var allYears = new Set();
+                    for (var year in val) {
+                        allYears.add(year);
+                        console.log("classifying year", year);
+                    }
 
-            else if (graphType == 'scatt') {
-                var data = [{
-                    x: [],
-                    y: [],
-                    mode: 'markers',
-                    type: 'scatter'
-                }];
-                var layout = {
-                    title: 'Scatter Plot',
-                    xaxis: { title: 'X-axis' },
-                    yaxis: { title: 'Y-axis' }
-                };
+                    // Convert Set to sorted array
+                    var allYearsArray = Array.from(allYears).sort();
+                    console.log("year:",allYearsArray);
+
+                    var type0 = Array(allYearsArray.length).fill(0);
+                    var type1 = Array(allYearsArray.length).fill(0);
+                    var type2 = Array(allYearsArray.length).fill(0);
+                    var type3 = Array(allYearsArray.length).fill(0);
+                    var type4 = Array(allYearsArray.length).fill(0);
+                    var type5 = Array(allYearsArray.length).fill(0);
+                    var type6 = Array(allYearsArray.length).fill(0);
+
+                    for (var year of allYearsArray) {
+                        if(year in val){
+                            var index = allYearsArray.indexOf(year);
+                            type0[index] = val[year][typeValues[0]] || 0;
+                            type1[index] = val[year][typeValues[1]] || 0;
+                            type2[index] = val[year][typeValues[2]] || 0;
+                            type3[index] = val[year][typeValues[3]] || 0;
+                            type4[index] = val[year][typeValues[4]] || 0;
+                            type5[index] = val[year][typeValues[5]] || 0;
+                            type6[index] = val[year][typeValues[6]] || 0;
+                        }
+                    }
+                    if(SG==='hist'){
+                        var trace0 = { x: allYearsArray, y: type0 ,type: 'bar',width: 0.1, name: typeValues[0] };
+                        var trace1 = { x: allYearsArray, y: type1 ,type: 'bar',width: 0.1, name: typeValues[1] };
+                        var trace2 = { x: allYearsArray, y: type2 ,type: 'bar',width: 0.1, name: typeValues[2] };
+                        var trace3 = { x: allYearsArray, y: type3 ,type: 'bar',width: 0.1, name: typeValues[3] };
+                        var trace4 = { x: allYearsArray, y: type4 ,type: 'bar',width: 0.1, name: typeValues[4] };
+                        var trace5 = { x: allYearsArray, y: type5 ,type: 'bar',width: 0.1, name: typeValues[5] };
+                        var trace6 = { x: allYearsArray, y: type6 ,type: 'bar',width: 0.1, name: typeValues[6] };
+                    }
+                    else{
+                        var trace0 = { x: allYearsArray, y: type0, mode: 'lines+markers',type: 'scatter', name: typeValues[0] };
+                        var trace1 = { x: allYearsArray, y: type1, mode: 'lines+markers',type: 'scatter', name: typeValues[1] };
+                        var trace2 = { x: allYearsArray, y: type2, mode: 'lines+markers',type: 'scatter', name: typeValues[2] };
+                        var trace3 = { x: allYearsArray, y: type3, mode: 'lines+markers',type: 'scatter', name: typeValues[3] };
+                        var trace4 = { x: allYearsArray, y: type4, mode: 'lines+markers',type: 'scatter', name: typeValues[4] };
+                        var trace5 = { x: allYearsArray, y: type5, mode: 'lines+markers',type: 'scatter', name: typeValues[5] };
+                        var trace6 = { x: allYearsArray, y: type6, mode: 'lines+markers',type: 'scatter', name: typeValues[6] };
+                    }
+                    var data;
+                    data = [trace1, trace2, trace3, trace4, trace5];
+                    return {data: data, layout: layout};
+                }
+                else{
+                    var type0 = 0;
+                    var type1 = 0;
+                    var type2 = 0;
+                    var type3 = 0;
+                    var type4 = 0;
+                    var type5 = 0;
+                    var type6 = 0;
+                    for (var year in val) {
+                        type0 += val[year][typeValues[0]] || 0;
+                        type1 += val[year][typeValues[1]] || 0;
+                        type2 += val[year][typeValues[2]] || 0;
+                        type3 += val[year][typeValues[3]] || 0;
+                        type4 += val[year][typeValues[4]] || 0;
+                        type5 += val[year][typeValues[5]] || 0;
+                        type6 += val[year][typeValues[6]] || 0;
+                    }
+                }
+                var val_y = [type0,type1,type2,type3,type4,type5,type6];
+                var val_x = [typeValues[0],typeValues[1],typeValues[2],typeValues[3],typeValues[4],typeValues[5],typeValues[6]];
+                if(SG==='hist'){
+                    var data = { x: val_x, y: val_y ,type: 'bar',width: 0.5};
+                }
+                else{
+                    var data = {x: val_x, y: val_y, mode: 'lines+markers',type: 'scatter'};
+                }
+                return {data: data, layout: layout};
+
             }
-            return { data: data, layout: layout };
         }
     </script>
+    <script>
+        function submitAllForms() {
+            // Create a new URL object and a new URLSearchParams object to ensure they are empty initially
+            var url = new URL(window.location.href);
+            var params = new URLSearchParams();
 
+            // Function to append form data to the parameters
+            function appendFormData(form) {
+                var formData = new FormData(form);
+                for (var [key, value] of formData.entries()) {
+                    params.append(key, value);
+                }
+            }
+        
+            // Append data from each form
+            appendFormData(document.getElementById('form1'));
+            appendFormData(document.getElementById('form2'));
+            appendFormData(document.getElementById('form3'));
+            appendFormData(document.getElementById('form4'));
+        
+            // Append data from any other forms
+            var otherForms = document.querySelectorAll('form:not(#form1, #form2, #form3, #form4)');
+            otherForms.forEach(appendFormData);
+        
+            // Redirect to the new URL with combined parameters
+            window.location.href = url.origin + url.pathname + '?' + params.toString();
+        }
+
+    </script>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(document).ready(function() {
+            $('#form5').on('submit', function(event) {
+                event.preventDefault();  // Prevent the default form submission
+
+                const keyword = $('#keyword').val().trim();
+                if (keyword) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/ajax/search-keyword/',
+                        data: {
+                            keyword: keyword,
+                            csrfmiddlewaretoken: getCookie('csrftoken')
+                        },
+                        success: function(response) {
+                            if (response.count !== undefined) {
+                                $('#result-count').text(response.count);
+                            } else if (response.error) {
+                                alert(response.error);
+                            }
+                        },
+                        error: function(error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                } else {
+                    alert('Please enter a keyword');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
