@@ -353,7 +353,7 @@ def send_message(request):
                 message.image = image
             message.save()
 
-            return JsonResponse({'message': 'Message sent successfully'})
+            return redirect('messages')
         else:
             return JsonResponse({'error': 'Form data is invalid', 'errors': form.errors})
     else:

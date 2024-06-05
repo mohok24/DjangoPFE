@@ -56,7 +56,7 @@
                             <p>Patient age: {{ x.age }}</p>
                             <p  class="radiologist-username">
                                 Radiologists:{% for radiologist in x.radiologists.all %}
-                                {{ radiologist.firstname }} {{ radiologist.lastname }}, {{radiologist.username}}
+                                {{ radiologist.first_name }} {{ radiologist.last_name }}, {{radiologist.username}}
                                 {% endfor %}
                             </p>
 

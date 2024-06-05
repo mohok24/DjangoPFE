@@ -42,7 +42,13 @@
                     </div>
                     <div id="patient-data-section" class="section">
                         <ul>
-                            <li>Name: {{patient.firstname}} {{patient.lastname}} <button class="er" id="fillFormBtn">Generate plot</button></li>
+                            {% for radiologist in x.patient.radiologists.all %}
+                            {% if user.username == radiologist.username %}
+                            <li>Name: {{ patient.firstname }} {{ patient.lastname }}<button class="er" id="fillFormBtn">Add patient</button></li>
+                            {% endif %}
+                            {% endfor %}
+
+                            <li>ID: {{patient.id}}</li>
                             <li>Age:{{patient.age}}</li>
                             <li>Number of reports: {{patient.num_reports}}</li>
                             <li>Latest report: {{date}}</li>
