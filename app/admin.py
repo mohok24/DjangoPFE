@@ -6,7 +6,26 @@ from .models import User, Patient, Report
 from .models import DocumentFolderPath
 
 admin.site.register(DocumentFolderPath)
-admin.site.register(Report)
+
+from django.contrib import admin
+
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ("patient_firstname", "patient_lastname", "user_username", "date")
+
+    def patient_firstname(self, obj):
+        return obj.patient.firstname if obj.patient else 'No Patient'
+
+    def patient_lastname(self, obj):
+        return obj.patient.lastname if obj.patient else 'No Patient'
+
+    def user_username(self, obj):
+        return obj.user.username if obj.user else 'No User'
+
+    patient_firstname.short_description = 'Patient Firstname'
+    patient_lastname.short_description = 'Patient Lastname'
+    user_username.short_description = 'User Username'
+
+admin.site.register(Report, ReportAdmin)
 admin.site.register(Patient)
 
 class CustomUserCreationForm(UserCreationForm):

@@ -355,7 +355,7 @@ def send_message(request):
 
             return JsonResponse({'message': 'Message sent successfully'})
         else:
-            return JsonResponse({'error': 'Form data is invalid'})
+            return JsonResponse({'error': 'Form data is invalid', 'errors': form.errors})
     else:
         receiver = request.GET.get('receiver')
         form = MessageForm(initial={'receiver': receiver}) 
@@ -632,81 +632,6 @@ from datetime import datetime, timedelta
 from django.db.models import Count
 from django.shortcuts import render
 from .models import Report
-
-def statistics(request):
-    time_range = request.GET.get('time_range', 'all_time')
-    graph1_timerange = request.GET.get('time_range_g1', 'all_time')
-    graph2_timerange = request.GET.get('time_range_g2', 'all_time')
-
-    if time_range == 'past_week':
-        start_date = datetime.now() - timedelta(days=7)
-        end_date = datetime.now()
-    elif time_range == 'past_month':
-        start_date = datetime.now() - timedelta(days=30)
-        end_date = datetime.now()
-    elif time_range == 'past_year':
-        start_date = datetime.now() - timedelta(days=365)
-        end_date = datetime.now()
-    else:
-        start_date = None
-        end_date = None
-
-    if graph1_timerange == 'past_week':
-        start_date1 = datetime.now() - timedelta(days=7)
-        end_date1 = datetime.now()
-    elif graph1_timerange == 'past_month':
-        start_date1 = datetime.now() - timedelta(days=30)
-        end_date1 = datetime.now()
-    elif graph1_timerange == 'past_year':
-        start_date1 = datetime.now() - timedelta(days=365)
-        end_date1 = datetime.now()
-    else:
-        start_date1 = None
-        end_date1 = None
-
-    if graph2_timerange == 'past_week':
-        start_date2 = datetime.now() - timedelta(days=7)
-        end_date2 = datetime.now()
-    elif graph2_timerange == 'past_month':
-        start_date2 = datetime.now() - timedelta(days=30)
-        end_date2 = datetime.now()
-    elif graph2_timerange == 'past_year':
-        start_date2 = datetime.now() - timedelta(days=365)
-        end_date2 = datetime.now()
-    else:
-        start_date2 = None
-        end_date2 = None
-
-    if start_date and end_date:
-        reports = Report.objects.filter(date__range=[start_date, end_date])
-    else:
-        reports = Report.objects.all()
-    
-    if start_date and end_date:
-        reports_g1 = Report.objects.filter(date__range=[start_date, end_date])
-    else:
-        reports_g1 = Report.objects.all()
-
-
-    if start_date and end_date:
-        reports_g2 = Report.objects.filter(date__range=[start_date, end_date])
-    else:
-        reports_g2 = Report.objects.all()
-
-    num_reports = reports.count()
-    num_patients = reports.values('patient').distinct().count()
-    avg_age = reports.aggregate(avg_age=Count('patient__age'))['avg_age']
-
-    context = {
-        'time_range': time_range,
-        'num_reports': num_reports,
-        'num_patients': num_patients,
-        'avg_age': avg_age,
-        'reports':reports,
-        'reports_g1':reports_g1,
-        'reports_g2':reports_g2,
-    }
-    return render(request, 'statistics.html', context)
 
 
 from django.http import JsonResponse

@@ -30,7 +30,7 @@
                 <div class="box">
                     <div class="message-detail">
                         <h1>Send Message</h1>
-                        <form id="message-form" action="/send-message/" method="post" enctype="multipart/form-data">
+                        <form id="messageform" action="/send_message/" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form.as_p }}
                             <button type="submit">Send</button>

@@ -12,6 +12,8 @@ class Patient(models.Model):
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
     age = models.IntegerField()
+    def __str__(self):
+        return f"{self.firstname} {self.lastname}"
 
 from django.db import models
 from django.conf import settings
@@ -36,6 +38,10 @@ class Report(models.Model):
     bothclassification = models.CharField(max_length=800, default="", blank=True)
     conclusion = models.CharField(max_length=800, default="", blank=True)
     recommendations = models.CharField(max_length=800, default="", blank=True)
+    def __str__(self):
+        patient_name = self.patient.lastname if self.patient else "No Patient"
+        user_name = self.user.username if self.user else "No User"
+        return f"{patient_name} {user_name} {self.id}"
 
 
 class Message(models.Model):
