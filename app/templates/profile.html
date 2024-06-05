@@ -16,21 +16,20 @@
             <ul>
                 <li class="ispressed">Reports</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
-                <li><a href="#">Statistics</a></li>
+                <li><a href="{% url 'statistics' %}">Statistics</a></li>
                 <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a href="{% url 'reports' %}">Reports</a></li>
+                    <li><a href="{% url 'reports' %}">Profile</a></li>
                     <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
                 <img src="image.png" alt="" class="prf-pic">
             </div>
             <div class="page">
                 <div class="profile">
-                    <!-- sq1 -->
                     <div class="sq1">
                         <img src="{%static 'image.png'%}" alt="" class="prf-pic">
                         <table>
@@ -48,7 +47,6 @@
                             </tr>
                         </table>
                     </div>
-                    <!-- sq2 -->
                     <div class="flex2">
                         <div class="sq2">
                             <table>
@@ -62,7 +60,6 @@
                                 </tr>
                             </table>
                         </div>
-                        <!-- sq3 -->
                         <div class="sq3">
                             <a href="{% url 'send_message' %}?receiver={{ user.username }}" class="btn">Send Message</a>
                             {% if user.role == 'Radiologist' %}

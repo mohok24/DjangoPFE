@@ -35,15 +35,34 @@ from django import forms
 from .models import Message
 
 class MessageForm(forms.ModelForm):
-    receiver = forms.CharField(max_length=100)  
-
+    
     class Meta:
         model = Message
-        fields = ['subject','content', 'image']  
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['image'].required = False 
+        fields = ['receiver', 'subject', 'content', 'image']
+        widgets = {
+            'receiver': forms.TextInput(attrs={'class': 'inp1', 'placeholder': 'Enter receiver'}),
+            'subject': forms.TextInput(attrs={'class': 'inp1', 'placeholder': 'Enter subject'}),
+            'content': forms.Textarea(attrs={'class': 'inp2', 'placeholder': 'Enter content', 'rows': 5, 'cols': 40}),
+            'image': forms.FileInput(attrs={'class': 'inp_image'}),
+        }
+        labels = {
+            'receiver': False,
+            'subject':False,
+            'content':False,
+            'image':False,
+        }
 
+    def __init__(self, *args, **kwargs):
+        receiver = kwargs.pop('receiver', None)
+        super().__init__(*args, **kwargs)
+        self.fields['image'].required = False
+        if receiver:
+            self.initial['receiver'] = receiver
+
+        self.fields['receiver'].initial = ''
+        self.fields['subject'].initial = ''
+        self.fields['content'].initial = ''
+        
 from django import forms
 from .models import Report
 

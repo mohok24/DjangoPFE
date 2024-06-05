@@ -264,12 +264,16 @@ h2 {
     text-align: center;
     background-color: #007bff;
     border-radius: 10px;
-    color: #fff; /* White text color */
-    text-decoration: none; /* Remove underline */
-    transition: background-color 0.3s ease; /* Smooth transition */
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s ease; 
 }
 
-    /* Hover effect */
+
     .btn:hover {
-        background-color: #0056b3; /* Darker blue color on hover */
+        background-color: #0056b3;
+
     }
+ul.dir-link li:first-child {
+    padding-right: 55%;
+}

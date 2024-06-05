@@ -10,11 +10,11 @@
 </head>
 <body>
     <header class="header">
-        <h2 class="logo">Radiology Report Platform</h2>
+        <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class ="logo"></a></h2>
 
         <nav class="navbar">
             <a href="{%url 'patients' %}">Patients</a>
-            <a href="#">Statistics</a>
+            <a href="{%url 'statistics'%}">Statistics</a>
             <a href="{%url 'reports' %}">Reports</a>
             <a href="{%url 'messages' %}">Message</a>
         </nav>

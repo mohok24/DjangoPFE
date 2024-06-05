@@ -21,11 +21,9 @@ body{
     z-index: 100;
 }
 
-.logo{
-    font-size: 25px;
-    color: #ededed;
-    text-decoration: none;
-    font-weight: 600;
+h2 a img.logo {
+    width: 250px;
+    height: 100px;
 }
 
 .navbar a{

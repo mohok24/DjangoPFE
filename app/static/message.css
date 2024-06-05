@@ -5,7 +5,7 @@
   list-style: none;
   text-decoration: none;
   font-family: 'josefin', sans-serif;
-  color:white;
+  color:rgb(0, 0, 0);
 }
 
 body{
@@ -55,6 +55,12 @@ body{
   justify-content: center;
   align-items: center;
 }
+
+.wrapper .sidebar h2 a img.logo{
+  width:250px;
+  height: 150px;
+}
+
 
 .wrapper .sidebar h2 {
   color: #fff;
@@ -119,7 +125,7 @@ p{
   width: 100%;
   height: 80px;
   background:#0B132B;
-  color:#717171;
+  color:#ffffff;
   border-bottom: 1px solid #d8c5ff;
 }
 
@@ -135,8 +141,16 @@ p{
   margin-left: 5px;
 }
 
+.wrapper .main_content .header ul.dir-link li a{
+  color:#FFF;
+}
+
 .wrapper .main_content .header ul.dir-link li a:hover{
-  color: #bc0808;
+  color: aqua;
+}
+
+.dir-link li:first-child {
+  padding-right: 70%;
 }
 
 .wrapper .main_content .header .prf-pic {
@@ -214,11 +228,11 @@ width: 55%;
 padding: 10px;
 border-bottom: 10px;
 background: transparent;
-border: 2px solid #0ef;
+border: 2px solid #192346;
 outline: none;
 border-radius: 6px;
 font-size: 16px;
-color:#ededed;
+color:#192346;
 margin:9px 0;
 }
 
@@ -230,18 +244,18 @@ resize: none;
 form input.inp1::placeholder,
 form textarea.inp2::placeholder,
 form input.inp_image{
-color:rgba(127, 246, 255, 0.5);
+color:rgba(25, 35, 70,.7);
 }
 
 form button{
 padding: 12px 32px;
-background: #0ef;
+background: #102370;
 border: none;
 outline: none;
 border-radius: 6px;
-box-shadow: 0 0 10px #0ef;
+/*box-shadow: 0 0 10px rgba(0, 81, 255, 0.918);*/
 font-size: 16px;
-color: #333;
+color: #fff;
 letter-spacing: 1px;
 font-weight: 600;
 cursor: pointer;
@@ -284,7 +298,8 @@ button {
 }
 
     button:hover {
-        background-color: #0056b3;
+        background-color: #ffffff;
+        color: #192346;
     }
 .btn {
     display: inline-block;

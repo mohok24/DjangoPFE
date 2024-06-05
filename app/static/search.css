@@ -5,7 +5,7 @@
     list-style: none;
     text-decoration: none;
     font-family: 'josefin', sans-serif;
-    color: white;
+    color: #000;
 }
 
 body {
@@ -109,6 +109,12 @@ p {
     color: aqua;
 }
 
+.wrapper .sidebar h2 a img.logo{
+    width:250px;
+    height: 150px;
+}
+  
+
 .wrapper .main_content {
     position: static;
     margin-left: 300px;
@@ -133,29 +139,79 @@ p {
             margin-top: 20px;
         }
 
-            .wrapper .main_content .header ul.dir-link li {
-                display: inline-block;
-                margin-left: 5px;
-            }
-
-                .wrapper .main_content .header ul.dir-link li a:hover {
-                    color: #bc0808;
-                }
-
-        .wrapper .main_content .header .prf-pic {
-            margin-left: 91%;
-            position: absolute;
-            margin-right: 5px;
-            top: 7px;
-            width: 65px;
-            height: 65px;
-            border: 3px solid #bc0808;
-            border-radius: 40px;
+        .wrapper .main_content .header ul.dir-link li {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .wrapper .main_content .header ul.dir-link li a{
+            color: #FFF;
         }
 
-    .wrapper .main_content .page {
-        position: relative;
+    .wrapper .main_content .header ul.dir-link li a:hover {
+        color:aqua;
     }
+
+.wrapper .main_content .header .prf-pic {
+    margin-left: 91%;
+    position: absolute;
+    margin-right: 5px;
+    top: 7px;
+    width: 65px;
+    height: 65px;
+    border-radius: 40px;
+}
+
+.wrapper .main_content .page {
+    position: relative;
+}
+
+.wrapper .main_content .page .search-filter{
+    margin: 40px 0 0 40px;
+    background-color: #0082e963;
+    border-radius: 10px;
+    height:950px;
+    width:400px;
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper .main_content .page .search-filter2{
+    margin: 40px 0 0 40px;
+    background-color: #0082e963;
+    border-radius: 10px;
+    height:200px;
+    width:400px;
+    padding:10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wrapper .main_content .page .search-filter .individual-fields,
+.wrapper .main_content .page .search-filter2 .individual-fields{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper .main_content .page .search-filter .individual-fields input,
+.wrapper .main_content .page .search-filter .individual-fields label,
+.wrapper .main_content .page .search-filter2 .individual-fields input,
+.wrapper .main_content .page .search-filter2 .individual-fields label{
+    margin-top: -3px;
+    margin-bottom: 0;
+}
+
+.search-button-container {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 
 .page .box::-webkit-scrollbar {
     width: 12px;
@@ -172,7 +228,7 @@ p {
 
 .page .box {
     position: relative;
-    background-color: #a3a3a3;
+    background-color: #0082e963;
     min-width: 300px;
     margin: 40px;
     border-radius: 5px;
@@ -225,6 +281,10 @@ p {
         justify-content: center;
     }
 
+    .box h2{
+        color:#000;
+    }
+
         .box .list .pat-info .seemore {
             position: absolute;
             right: -150px;
@@ -244,18 +304,19 @@ p {
         line-height: 1.2em;
         font-weight: 600;
         transition: 0.5s;
+        color:#000;
     }
 
 
     .box .list .pat-info p {
         font-size: 0.7em;
         transition: 0.5s;
-        color: #fff;
+        color: #000000;
     }
 
     .box .list:hover .pat-info h4,
     .box .list:hover .pat-info p {
-        color: #0B132B;
+        color: #ffffff;
     }
 /* patient.css */
 

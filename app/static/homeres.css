@@ -57,7 +57,7 @@ body, html {
     width: 80%;
     max-width: 800px;
     margin: 20px auto;
-    padding-top: 100px; /* To ensure the content doesn't overlap with the header */
+    padding-top: 100px; 
 }
 
 .box {
@@ -113,6 +113,6 @@ ul {
    
 }
 h2 a img.logo {
-    width: 100px;
+    width: 200px;
     height: 50px;
 }

@@ -64,6 +64,12 @@
     position: absolute;
     top: 30px;
   }
+
+  .wrapper .sidebar h2 a img.logo{
+    width:250px;
+    height: 150px;
+  }
+  
   
   .wrapper .sidebar ul {
     list-style: none;
@@ -129,14 +135,22 @@
     margin-left: 30px;
     margin-top: 20px;
   }
+
+  .dir-link li:first-child {
+    padding-right: 70%;
+}
   
   .wrapper .main_content .header ul.dir-link li{
     display: inline-block;
     margin-left: 5px;
   }
   
+  .wrapper .main_content .header ul.dir-link li a{
+    color:#FFF;
+  }
+  
   .wrapper .main_content .header ul.dir-link li a:hover{
-    color: #bc0808;
+    color: aqua;
   }
   
   .wrapper .main_content .header .prf-pic {
@@ -174,7 +188,7 @@
   
   .page .box{
     position: relative;
-    background-color: #1f242d;
+    background-color: #0082e963;
     width:600px;
     border-radius: 5px;
     padding: 20px;
@@ -266,14 +280,23 @@ strong {
 
 .page .box .header-box h1{
   margin-right: 15px;
+  color: #000;
 }
   
 .message-detail div {
-  border: 1px solid rgb(255, 255, 255);
+  border: 1px solid rgb(0, 0, 0);
   border-radius: 10px;
   width:500px;
   padding: 5px;
   margin-bottom: 10px; /* Optional: Add some spacing between each pair */
+}
+
+.message-detail div strong{
+  color: #000;
+}
+
+.black{
+  color: #000;
 }
 
 .message-detail div.buttons{

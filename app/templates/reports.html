@@ -11,18 +11,18 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class ="logo"></a></h2>
             <ul>
                 <li class="ispressed">Reports</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
-                <li><a href="#">Statistics</a></li>
+                <li><a href="{%url 'statistics'%}">Statistics</a></li>
                 <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a href="#">Reports</a></li>
+                    <li><a href="{%url 'reports'%}">Reports</a></li>
                     <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>                  
                 </ul>
             </div>
@@ -40,7 +40,19 @@
                         </div>
                     </div>
                     <div class="search-button">
-                        <a href="{% url 'report_search' %}" class="btn">Search Reports</a>
+                        <div class="top-section">
+                            <div class="column">
+                                <a href="{% url 'report_search' %}" class="btn">Search Reports</a>
+                            </div>
+                            {% if user.is_authenticated and user.role == 'Radiologist' %}
+                            <div class="column">
+                                <a href="{% url 'add_report' %}" class="btn">Add report</a>
+                            </div>
+                            {% endif %}
+                            <div class="column">
+                                <a href="{% url 'upload' %}" class="btn">Upload report</a>
+                            </div>
+                        </div>
                     </div>
                     {% for x in report %}
                     <div class="list">

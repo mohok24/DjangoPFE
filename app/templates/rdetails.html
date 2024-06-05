@@ -16,7 +16,7 @@
             <ul>
                 <li class="ispressed">Report</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
-                <li><a href="#">Statistics</a></li>
+                <li><a href="{% url 'statistics' %}">Statistics</a></li>
                 <li><a href="{% url 'messages' %}">Message</a></li>
             </ul>
         </div>
@@ -37,7 +37,12 @@
                         </div>
                         <div class="border">
                             <h2>{{ report.type }}</h2>
-                            <p class="title">Name: {{ report.patient.firstname }} {{ report.patient.lastname }}</p>
+                            {% for radiologist in report.patient.radiologists.all %}
+                            {% if request.user.username == radiologist.username %}
+                            <p class="title">Patient: {{ report.patient.firstname }} {{ report.patient.lastname }}</p>
+                            {% endif %}
+                            {% endfor %}
+                            <p class="title">ID: {{report.patient.id}}</p>
                             <p class="title">Age: {{ report.patient.age }}</p>
                             <p class="title">Indication: {{ report.indication }}</p>
                             <p class="title">ACR: {{ report.acr }}</p>

@@ -11,88 +11,91 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class ="logo"></a></h2>
             <ul>
                 <li class="ispressed">Reports</li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
-                <li><a href="#">Statistics</a></li>
+                <li><a href="{%url 'statistics' %}">Statistics</a></li>
                 <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a id="yay" href="#">Reports</a></li>
+                    <li><a id="yay" href="{%url 'reports' %}">Reports</a></li>
                     <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
             </div>
             <div class="page">
+                <div class="search-filter">
+                    <h1>Search Reports</h1>
 
-                <h1>Search Reports</h1>
+                    <form method="get" id="report-search-form">
+                        {% csrf_token %}
 
-                <form method="get" id="report-search-form">
-                    {% csrf_token %}
+                        <div class="individual-fields">
+                            <label> choose ur search method?</label>
+                            <br/>
 
-                    <div class="individual-fields">
-                        <label> choose ur search method?</label>
-                        <br />
+                            <input type="radio" id="exact" name="dates" value="exact" checked>
+                            <label for="exact">Exact date</label>
+                            <input type="radio" id="range" name="dates" value="range">
+                            <label for="range">Range</label><br />
 
-                        <input type="radio" id="exact" name="dates" value="exact" checked>
-                        <label for="exact">Exact date</label>
-                        <input type="radio" id="range" name="dates" value="range">
-                        <label for="range">Range</label><br />
+                            <label for="date" id="base">Date:</label>
+                            <input type="date" id="date" name="date">
 
-                        <label for="date" id="base">Date:</label>
-                        <input type="date" id="date" name="date">
+                            <label for="from" id="fromla" style="display: none;">Date from:</label>
+                            <input type="date" id="from_date" name="from_date" style="display: none;">
 
-                        <label for="from" id="fromla" style="display: none;">Date from:</label>
-                        <input type="date" id="from_date" name="from_date" style="display: none;">
+                            <label for="to" id="tola" style="display: none;">Date to:</label>
+                            <input type="date" id="to_date" name="to_date" style="display: none;">
+                            <br />
+                            <label for="patient_id">Patient ID:</label>
+                            <input type="text" id="patient_id" name="patient_id" />
+                            <br />
+                            <label for="patient_name">Patient name:</label>
+                            <input type="text" id="patient_name" name="patient_name" />
+                            <br />
+                            <label for="type">Report type:</label>
+                            <input type="text" id="type" name="type">
+                            <br />
 
-                        <label for="to" id="tola" style="display: none;">Date to:</label>
-                        <input type="date" id="to_date" name="to_date" style="display: none;">
-                        <br />
-                        <label for="patient_id">Patient ID:</label>
-                        <input type="text" id="patient_id" name="patient_id" />
-                        <br />
-                        <label for="patient_name">Patient name:</label>
-                        <input type="text" id="patient_name" name="patient_name" />
-                        <br />
-                        <label for="type">Report type:</label>
-                        <input type="text" id="type" name="type">
-                        <br />
-
-                        <label for="indication">Indication:</label>
-                        <input type="text" id="indication" name="indication">
-                        <br />
-                        <label for="leftM">Left M:</label>
-                        <input type="text" id="leftM" name="leftM">
-                        <br />
-                        <label for="rightM">Right M:</label>
-                        <input type="text" id="rightM" name="rightM">
-                        <br />
-                        <label for="bothM">Both M:</label>
-                        <input type="text" id="bothM" name="bothM">
-                        <br />
-                        <label for="leftE">Left E:</label>
-                        <input type="text" id="leftE" name="leftE">
-                        <br />
-                        <label for="rightE">Right E:</label>
-                        <input type="text" id="rightE" name="rightE">
-                        <br />
-                        <label for="bothE">Both E:</label>
-                        <input type="text" id="bothE" name="bothE">
-                        <br />
-                        <label for="classification">Classification:</label>
-                        <input type="text" id="classification" name="classification">
-                        <br />
-                        <label for="conclusion">Conclusion:</label>
-                        <input type="text" id="conclusion" name="conclusion">
-                        <br />
-                        <label for="recommendations">Recommendations:</label>
-                        <input type="text" id="recommendations" name="recommendations">
-                    </div>
-                    <button type="submit">Search</button>
-                </form>
+                            <label for="indication">Indication:</label>
+                            <input type="text" id="indication" name="indication">
+                            <br />
+                            <label for="leftM">Left M:</label>
+                            <input type="text" id="leftM" name="leftM">
+                            <br />
+                            <label for="rightM">Right M:</label>
+                            <input type="text" id="rightM" name="rightM">
+                            <br />
+                            <label for="bothM">Both M:</label>
+                            <input type="text" id="bothM" name="bothM">
+                            <br />
+                            <label for="leftE">Left E:</label>
+                            <input type="text" id="leftE" name="leftE">
+                            <br />
+                            <label for="rightE">Right E:</label>
+                            <input type="text" id="rightE" name="rightE">
+                            <br />
+                            <label for="bothE">Both E:</label>
+                            <input type="text" id="bothE" name="bothE">
+                            <br />
+                            <label for="classification">Classification:</label>
+                            <input type="text" id="classification" name="classification">
+                            <br />
+                            <label for="conclusion">Conclusion:</label>
+                            <input type="text" id="conclusion" name="conclusion">
+                            <br />
+                            <label for="recommendations">Recommendations:</label>
+                            <input type="text" id="recommendations" name="recommendations">
+                        </div>
+                        <div class="search-button-container">
+                            <button type="submit">Search</button>
+                        </div>
+                    </form>
+                </div>
                 <div class="box">
 
                     <h2>Search Results</h2>

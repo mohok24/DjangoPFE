@@ -62,13 +62,13 @@ def left_right(sentence):
     global both_sides_sentences
     global no_side_sentences
     if any(keyword in sentence.lower() for keyword in both_keywords):
-                            both_sides_sentences.append(sentence)
+                            both_sides_sentences.append(sentence+"\n")
     elif any(keyword in sentence.lower() for keyword in left_keywords) and any(keyword in sentence.lower() for keyword in right_keywords):
-                            both_sides_sentences.append(sentence)
+                            both_sides_sentences.append(sentence+"\n")
     elif any(keyword in sentence.lower() for keyword in right_keywords):
-                            right_side_sentences.append(sentence)
+                            right_side_sentences.append(sentence+"\n")
     elif any(keyword in sentence.lower() for keyword in left_keywords):
-                            left_side_sentences.append(sentence)
+                            left_side_sentences.append(sentence+"\n")
     else:
                                 no_side_sentences.append(sentence)   
 def left_rightadd(sentence1,sentence):
@@ -80,14 +80,15 @@ def left_rightadd(sentence1,sentence):
     global both_sides_sentences
     global no_side_sentences
     if any(keyword in sentence.lower() for keyword in both_keywords):
-                            both_sides_sentences.append((sentence1,sentence))
+                            both_sides_sentences.append((sentence1[0],sentence))
     elif any(keyword in sentence.lower() for keyword in right_keywords):
-                                right_side_sentences.append((sentence1,sentence))
+                                right_side_sentences.append((sentence1[0],sentence))
     elif any(keyword in sentence.lower() for keyword in left_keywords):
-                                left_side_sentences.append((sentence1,sentence))
+                                left_side_sentences.append((sentence1[0],sentence))
     else:
-                                no_side_sentences.append((sentence1,sentence))
+                                no_side_sentences.append((sentence1[0],sentence))
 def classify_sentences(text,type):
+    priority=0
     global left_keywords
     global right_keywords
     global both_keywords
@@ -119,8 +120,9 @@ def classify_sentences(text,type):
         newtext=newtext.strip()        
         if any(keyword in newtext.lower() for keyword in prio_keywords):
                         priority_found = True
-                        priority_sentence=newtext
-                        both_sides_sentences.append(newtext)
+                        priority += 1
+                        priority_sentence = f"{priority}.{newtext}"
+                        both_sides_sentences.append(f"{priority}.{newtext}\n")
         elif priority_found == True and not newtext.isspace():
                         merged_tokens=nlp(newtext)
                         similarity=reference_tokens.similarity(merged_tokens)
@@ -214,6 +216,8 @@ both_classification_pattern = re.compile(r"(bi-rads\s*[0-6]\s*[a,b,c]?)\s*(de l(
 def classify(file_path):
     nreport=Report.objects.create()
     leftm = None;
+    left= None;
+    right= None;
     rightm = None;
     rightc_match = None
     leftc_match = None
@@ -297,7 +301,8 @@ def classify(file_path):
             nreport.rightM=rightm
         
     for x in matches:
-        nreport.indication=nreport.indication+x
+        
+        nreport.recommendations=nreport.recommendations+x
     date=frenchtoiso(date)
     if date:
         nreport.date=date
@@ -340,5 +345,5 @@ def classify(file_path):
     nreport.patient=patient
     nreport.acr=acr
     nreport.conclusion=conclusion
-    nreport.recommendations=recommendation
+    nreport.indication=indication
     return nreport

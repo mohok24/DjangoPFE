@@ -9,7 +9,7 @@
 </head>
 <body>
     <header class="header">
-        <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class="logo"></a></h2>
+        <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_horizontal.png' %}" class="logo"></a></h2>
 
 
         <nav class="navbar">
@@ -32,7 +32,7 @@
         <div class="box bottom-left">
             <h3>View Statistics</h3>
             <p>Analyze data and view statistics.</p>
-            <a href="#">Go to Statistics</a>
+            <a href="{% url 'statistics' %}">Go to Statistics</a>
         </div>
         <div class="box bottom-right">
             <h3>View Messages</h3>

@@ -1,6 +1,8 @@
 """
 Definition of views.
 """
+from django.contrib import messages
+import json
 import os
 from asyncio.windows_events import NULL
 from datetime import datetime
@@ -23,6 +25,7 @@ from app.ai_model import AI
 import re
 from docx import Document
 from django.conf import settings
+
 
 ai=AI(model_path="threewordtest.h5")
 def home(request):
@@ -73,14 +76,8 @@ def restricted_view(request):
     return HttpResponse("You're logged in!")
 
 
+
 def login_view(request):
-    
-
-    raw_password = "a"
-    hashed_password = make_password(raw_password)
-
-    print(hashed_password)
-    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -101,7 +98,9 @@ def login_view(request):
                 next_url = '/'  
             print(f"meowab");
             return HttpResponseRedirect(next_url)
-        else: print(f"Authentication failed for user: {username}")
+        else:
+            messages.error(request, 'Invalid username or password. Please try again.')
+            print(f"Authentication failed for user: {username}")
 
     return render(request, 'login.html')
 
@@ -406,37 +405,210 @@ from .models import Report
 
 def statistics(request):
     time_range = request.GET.get('time_range', 'all_time')
+    acr_brad = request.GET.get('acr_brad')
 
-    if time_range == 'past_week':
-        start_date = datetime.now() - timedelta(days=7)
-        end_date = datetime.now()
-    elif time_range == 'past_month':
-        start_date = datetime.now() - timedelta(days=30)
-        end_date = datetime.now()
-    elif time_range == 'past_year':
-        start_date = datetime.now() - timedelta(days=365)
-        end_date = datetime.now()
-    else:
-        start_date = None
-        end_date = None
+    print("ACR or BIRAD:", acr_brad)
 
-    if start_date and end_date:
-        reports = Report.objects.filter(date__range=[start_date, end_date])
-    else:
-        reports = Report.objects.all()
+    s_date = request.GET.get('date-min')
+    e_date = request.GET.get('date-max')
+    age_max = request.GET.get('age-max')
+    age_min = request.GET.get('age-min')
+    query = Q()
 
-    num_reports = reports.count()
-    num_patients = reports.values('patient').distinct().count()
-    avg_age = reports.aggregate(avg_age=Count('patient__age'))['avg_age']
+    if s_date:
+        query &= Q(date__gte=s_date)
+    if e_date:
+        query &= Q(date__lte=e_date)
+    if age_max:
+        query &= Q(age__lte=age_max)
+    if age_min:
+        query &= Q(age__gte=age_min)
+
+    reports = Report.objects.filter(query)
+    print("Reports found:", reports.count())
+    
+    acr_r, acr_l, acr_b = [], [], []
+    time_r, time_l, time_b = [], [], []
+    brad_r, brad_l, brad_b = [], [], []
+
+    if acr_brad == 'acr':
+        for report in reports:
+            print("Report:", report.id)
+            if 'type a' in report.rightM.lower():
+                acr_r.append('type a')
+                time_r.append(report.date)
+            elif 'type b' in report.rightM.lower():
+                acr_r.append('type b')
+                time_r.append(report.date)
+            elif 'type c' in report.rightM.lower():
+                acr_r.append('type c')
+                time_r.append(report.date)
+            elif 'type d' in report.rightM.lower():
+                acr_r.append('type d')
+                time_r.append(report.date)
+            
+            print("Right M findings:", report.rightM.lower())
+
+            if 'type a' in report.leftM.lower():
+                acr_l.append('type a')
+                time_l.append(report.date)
+            elif 'type b' in report.leftM.lower():
+                acr_l.append('type b')
+                time_l.append(report.date)
+            elif 'type c' in report.leftM.lower():
+                acr_l.append('type c')
+                time_l.append(report.date)
+            elif 'type d' in report.leftM.lower():
+                acr_l.append('type d')
+                time_l.append(report.date)
+            
+            print("Left M findings:", report.leftM.lower())
+
+            if 'type a' in report.bothM.lower():
+                acr_b.append('type a')
+                time_b.append(report.date)
+            elif 'type b' in report.bothM.lower():
+                acr_b.append('type b')
+                time_b.append(report.date)
+            elif 'type c' in report.bothM.lower():
+                acr_b.append('type c')
+                time_b.append(report.date)
+            elif 'type d' in report.bothM.lower():
+                acr_b.append('type d')
+                time_b.append(report.date)
+
+            print("Both M findings:", report.bothM.lower())
+
+    elif acr_brad == 'birad':
+        for report in reports:
+            print("Report:", report.id)
+            if 'bi_rads' in report.rightclassification.lower():
+                if '0' in report.rightclassification:
+                    brad_r.append('type 0')
+                elif '1' in report.rightclassification:
+                    brad_r.append('type 1')
+                elif '2' in report.rightclassification:
+                    brad_r.append('type 2')
+                elif '3' in report.rightclassification:
+                    brad_r.append('type 3')
+                elif '4' in report.rightclassification:
+                    brad_r.append('type 4')
+                elif '5' in report.rightclassification:
+                    brad_r.append('type 5')
+                elif '6' in report.rightclassification:
+                    brad_r.append('type 6')
+                time_r.append(report.date)
+
+                print("Right classification:", report.rightclassification.lower())
+
+            if 'bi_rads' in report.leftclassification.lower():
+                if '0' in report.leftclassification:
+                    brad_l.append('type 0')
+                elif '1' in report.leftclassification:
+                    brad_l.append('type 1')
+                elif '2' in report.leftclassification:
+                    brad_l.append('type 2')
+                elif '3' in report.leftclassification:
+                    brad_l.append('type 3')
+                elif '4' in report.leftclassification:
+                    brad_l.append('type 4')
+                elif '5' in report.leftclassification:
+                    brad_l.append('type 5')
+                elif '6' in report.leftclassification:
+                    brad_l.append('type 6')
+                time_l.append(report.date)
+
+                
+                print("Left classification:", report.leftclassification.lower())
+
+            if 'bi_rads' in report.bothclassification.lower() or 'bi-rads' in report.bothclassification.lower():
+                if '0' in report.bothclassification:
+                    brad_b.append('type 0')
+                elif '1' in report.bothclassification:
+                    brad_b.append('type 1')
+                elif '2' in report.bothclassification:
+                    brad_b.append('type 2')
+                elif '3' in report.bothclassification:
+                    brad_b.append('type 3')
+                elif '4' in report.bothclassification:
+                    brad_b.append('type 4')
+                elif '5' in report.bothclassification:
+                    brad_b.append('type 5')
+                elif '6' in report.bothclassification:
+                    brad_b.append('type 6')
+                time_b.append(report.date)
+
+                print("Both classification:", report.bothclassification.lower())
+
+    print("acr_r :", acr_r)
+    print("brad_r:", brad_r)
+    print("time  :", time_r)
+    print("acr_l :", acr_l)
+    print("brad_l:", brad_l)
+    print("time  :", time_l)
+    print("acr_b :", acr_b)
+    print("brad_b:", brad_b)
+    print("time  :", time_b)
+
+    x_val = request.GET.get("x_val")
+    from collections import defaultdict, Counter
+
+    classified_data_r = defaultdict(lambda: defaultdict(Counter))
+    classified_data_l = defaultdict(lambda: defaultdict(Counter))
+    classified_data_b = defaultdict(lambda: defaultdict(Counter))
+
+    def add_to_classified_data(data, acr_list, time_list):
+        for type_, date in zip(acr_list, time_list):
+            year = date.strftime('%Y')
+            if type_ not in data[year]:
+                data[year][type_] = 0
+            data[year][type_] += 1
+            print(f"Added to data[{year}][{type_}]: {data[year][type_]}")
+
+    classified_data_r = defaultdict(lambda: defaultdict(Counter))
+    classified_data_l = defaultdict(lambda: defaultdict(Counter))
+    classified_data_b = defaultdict(lambda: defaultdict(Counter))
+    
+    if acr_r:
+        print("acr_r entered to classify")
+        add_to_classified_data(classified_data_r, acr_r, time_r)
+    if acr_l:
+        print("acr_l entered to classify")
+        add_to_classified_data(classified_data_l, acr_l, time_l)
+    if acr_b:
+        print("acr_b entered to classify")
+        add_to_classified_data(classified_data_b, acr_b, time_b)
+    if brad_r:
+        print("birad_r entered to classify")
+        add_to_classified_data(classified_data_r, brad_r, time_r)
+    if brad_l:
+        print("birad_l entered to classify")
+        add_to_classified_data(classified_data_l, brad_l, time_l)
+    if brad_b:
+        print("birad_b entered to classify")
+        add_to_classified_data(classified_data_b, brad_b, time_b)
+
+    def defaultdict_to_dict(d):
+        if isinstance(d, defaultdict):
+            d = {k: defaultdict_to_dict(v) for k, v in d.items()}
+        if isinstance(d, Counter):
+            d = dict(d)
+        return d
+
+
+    classified_data_r_dict = defaultdict_to_dict(classified_data_r)
+    classified_data_l_dict = defaultdict_to_dict(classified_data_l)
+    classified_data_b_dict = defaultdict_to_dict(classified_data_b)
 
     context = {
         'time_range': time_range,
-        'num_reports': num_reports,
-        'num_patients': num_patients,
-        'avg_age': avg_age,
-        'reports':reports
+        'reports': reports,
+        'classified_data_r': json.dumps(classified_data_r_dict),
+        'classified_data_l': json.dumps(classified_data_l_dict),
+        'classified_data_b': json.dumps(classified_data_b_dict),
     }
     return render(request, 'statistics.html', context)
+
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -466,7 +638,6 @@ def statistics(request):
     graph1_timerange = request.GET.get('time_range_g1', 'all_time')
     graph2_timerange = request.GET.get('time_range_g2', 'all_time')
 
-    # Define the start and end dates based on the selected time range
     if time_range == 'past_week':
         start_date = datetime.now() - timedelta(days=7)
         end_date = datetime.now()
@@ -480,7 +651,6 @@ def statistics(request):
         start_date = None
         end_date = None
 
-    #time for graph 1
     if graph1_timerange == 'past_week':
         start_date1 = datetime.now() - timedelta(days=7)
         end_date1 = datetime.now()
@@ -494,7 +664,6 @@ def statistics(request):
         start_date1 = None
         end_date1 = None
 
-    #time range graph 2
     if graph2_timerange == 'past_week':
         start_date2 = datetime.now() - timedelta(days=7)
         end_date2 = datetime.now()
@@ -508,30 +677,26 @@ def statistics(request):
         start_date2 = None
         end_date2 = None
 
-    # Filter reports based on the selected time range
     if start_date and end_date:
         reports = Report.objects.filter(date__range=[start_date, end_date])
     else:
         reports = Report.objects.all()
     
-    #graph1
     if start_date and end_date:
         reports_g1 = Report.objects.filter(date__range=[start_date, end_date])
     else:
         reports_g1 = Report.objects.all()
 
-    #graph2
+
     if start_date and end_date:
         reports_g2 = Report.objects.filter(date__range=[start_date, end_date])
     else:
         reports_g2 = Report.objects.all()
 
-    # Calculate statistics
     num_reports = reports.count()
     num_patients = reports.values('patient').distinct().count()
     avg_age = reports.aggregate(avg_age=Count('patient__age'))['avg_age']
 
-    # Pass data to the template
     context = {
         'time_range': time_range,
         'num_reports': num_reports,
@@ -654,7 +819,8 @@ def process_and_generate_pdf(file_path):
             'bothe': report.bothE,
             'leftc': report.leftclassification,
             'rightc': report.rightclassification,
-            'bothc': report.bothclassification
+            'bothc': report.bothclassification,
+            'conc' : report.conclusion
         }
     }
     

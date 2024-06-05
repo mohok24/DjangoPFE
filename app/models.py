@@ -13,26 +13,30 @@ class Patient(models.Model):
     lastname = models.CharField(max_length=255)
     age = models.IntegerField()
 
+from django.db import models
+from django.conf import settings
+
 class Report(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,null=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     date = models.DateField(null=True)
-    acr = models.CharField(max_length=255, default="", blank=True)
-    type = models.CharField(max_length=255, default="", blank=True)
-    indication = models.CharField(max_length=255, default="", blank=True)
-    leftM = models.CharField(max_length=255, default="", blank=True)
-    rightM = models.CharField(max_length=255, default="", blank=True)
-    bothM = models.CharField(max_length=255, default="", blank=True)
-    noneM=models.CharField(max_length=255,default="", blank=True)
-    leftE = models.CharField(max_length=255, default="", blank=True)
-    rightE = models.CharField(max_length=255, default="", blank=True)
-    bothE = models.CharField(max_length=255, default="", blank=True)
-    noneE=models.CharField(max_length=255,default="", blank=True)
-    leftclassification = models.CharField(max_length=255, default="", blank=True)
-    rightclassification = models.CharField(max_length=255, default="", blank=True)
-    bothclassification = models.CharField(max_length=255,default="", blank=True)
-    conclusion = models.CharField(max_length=255, default="", blank=True)
-    recommendations = models.CharField(max_length=255, default="", blank=True)
+    acr = models.CharField(max_length=800, default="", blank=True)
+    type = models.CharField(max_length=800, default="", blank=True)
+    indication = models.CharField(max_length=800, default="", blank=True)
+    leftM = models.CharField(max_length=800, default="", blank=True)
+    rightM = models.CharField(max_length=800, default="", blank=True)
+    bothM = models.CharField(max_length=800, default="", blank=True)
+    noneM = models.CharField(max_length=800, default="", blank=True)
+    leftE = models.CharField(max_length=800, default="", blank=True)
+    rightE = models.CharField(max_length=800, default="", blank=True)
+    bothE = models.CharField(max_length=800, default="", blank=True)
+    noneE = models.CharField(max_length=800, default="", blank=True)
+    leftclassification = models.CharField(max_length=800, default="", blank=True)
+    rightclassification = models.CharField(max_length=800, default="", blank=True)
+    bothclassification = models.CharField(max_length=800, default="", blank=True)
+    conclusion = models.CharField(max_length=800, default="", blank=True)
+    recommendations = models.CharField(max_length=800, default="", blank=True)
+
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')

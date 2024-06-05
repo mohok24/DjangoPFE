@@ -16,7 +16,7 @@
             <ul>
                 <li><a href="{% url 'reports' %}">Report</a></li>
                 <li class="ispressed">Patients</li>
-                <li><a href="#">Statistics</a></li>
+                <li><a href="{% url 'statistics' %}">Statistics</a></li>
             </ul>
         </div>
         <div class="main_content">
@@ -83,19 +83,16 @@
                             var y_values = {{ y_values|safe }};
 
 
-                            // Replace -1 values with null
                             var filtered_y_values = y_values.map(function(entry) {
                                 return entry.map(function(value) {
                                     return value === -1 ? null : value;
                                 });
                             });
 
-                            // Extracting filtered y-axis values
                             var filtered_right_values = filtered_y_values.map(function(entry) { return entry[0]; });
                             var filtered_left_values = filtered_y_values.map(function(entry) { return entry[1]; });
                             var filtered_both_values = filtered_y_values.map(function(entry) { return entry[2]; });
 
-                            // Create traces for each y-axis value
                             var trace_right = {
                                 x: x_values,
                                 y: filtered_right_values,
@@ -104,7 +101,7 @@
                                     size: 10,
                                     color: 'blue'
                                 },
-                                name: 'Right'  // Name of the trace for the legend
+                                name: 'Right'  
                             };
 
                             var trace_left = {
@@ -115,7 +112,7 @@
                                     size: 10,
                                     color: 'red'
                                 },
-                                name: 'Left'  // Name of the trace for the legend
+                                name: 'Left'  
                             };
 
                             var trace_both = {
@@ -126,10 +123,9 @@
                                     size: 10,
                                     color: 'green'
                                 },
-                                name: 'Both'  // Name of the trace for the legend
+                                name: 'Both'  
                             };
 
-                            // Define layout
                             var layout = {
                                 title: 'Plot',
                                 xaxis: {
@@ -143,13 +139,9 @@
                             };
 
                                 Plotly.newPlot('plot-container', [trace_right, trace_left, trace_both], layout).then(function (plot) {
-                                    // Add event listener to plot points
                                     document.getElementById('plot-container').on('plotly_click', function (data) {
-                                        // Extract the data point clicked
                                         var point = data.points[0];
-                                        // Extract the ID of the report corresponding to the clicked point
                                         var reportId = reports[point.pointNumber].id;
-                                        // Redirect to the respective report URL
                                         window.location.href = '/reports/rdetails/' + reportId; // Replace '/reports/' with the actual URL pattern
                                     });
                                 });
@@ -172,11 +164,9 @@
         var historySection = document.getElementById("history-section");
         var patientDataSection = document.getElementById("patient-data-section");
 
-        // Show history section and hide patient data section by default
         historySection.style.display = "flex";
         patientDataSection.style.display = "none";
 
-        // Add event listeners to tabs
         historyTab.addEventListener("click", function () {
             historySection.style.display = "flex";
             patientDataSection.style.display = "none";

@@ -12,20 +12,20 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2>Statistics</h2>
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class ="logo"></a></h2>
             <ul>
-                <li><a href="#">Report</a></li>
-                <li><a href="#">Patient</a></li>
+                <li><a href="{%url 'reports'%}">Report</a></li>
+                <li><a href="{%url 'patients'%}">Patient</a></li>
                 <li class="ispressed">Statistics</li>
+                <li><a href="{%url 'messages'%}">Messages</a></li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a href="#">home_page</a></li>
-                    <li>> <a href="#">Statistics</a></li>
+                    <li><a href="{%url 'statistics'%}">Statistics</a></li>
+                    <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
-                <img src="image.png" alt="" class="prf-pic">
             </div>
             <div class="page">
                 <main class="main-container">
@@ -127,7 +127,7 @@
                         </div>
                         <div class="card">
                             <div class="card-inner">
-                                <button type="button" onclick="submitAllForms()">Generate Plot</button>
+                                <button class="er" type="button" onclick="submitAllForms()">Generate Plot</button>
                             </div>
                         </div>
                     </div>
@@ -136,73 +136,109 @@
                             <h2 class="chart-title">graph1</h2>
                             <div id="bar-chart">
                                 <script>
-                                    window.onload = function() {
-                                        console.log("hi world");
-                                        var urlParams = new URLSearchParams(window.location.search);
-
-                                        // Extract values from the URL
-                                        var SG = urlParams.get("graph_type");
-
-                                        var areaParams = urlParams.getAll("area");
-                                        var leftChecked = areaParams.includes("left");
-                                        var rightChecked = areaParams.includes("right");
-                                        var bothChecked = areaParams.includes("both");
-                                        var graph = urlParams.get('graph');
-                                        var Ch_stt = document.getElementById("stt").value;
-                                        var Ch_t = document.getElementById("time").value;
-                                        var x_valParams = urlParams.getAll("x_val");
-                                        var Ch_sttChecked = x_valParams.includes("stt");
-                                        var Ch_tChecked = x_valParams.includes("time");
-
-                                        
-                                        //check area studied
-                                        var pltright = {data: null, layout: null};
-                                        var pltleft = {data: null, layout: null};
-                                        var pltboth = {data: null, layout: null};
-                                        if(rightChecked){
-                                            var val_r = JSON.parse('{{ classified_data_r|escapejs }}');
-                                            if(Ch_tChecked)
-                                                pltright = per_plot(val_r, Ch_t, SG);
-                                            else {
-                                                if (Ch_sttChecked) {
-                                                    pltright = per_plot(val_r, Ch_stt, SG);
-                                                }
-                                            }
-                                        }
-                                        if(leftChecked){
-                                            var val_l = JSON.parse('{{ classified_data_l|escapejs }}');
-                                            if(Ch_tChecked)
-                                                pltleft = per_plot(val_l, Ch_t, SG);
-                                            else {
-
-                                                if (Ch_sttChecked) {
-                                                    pltleft = per_plot(val_l, Ch_stt, SG);
-                                                }
-                                            }
-                                        }
-                                        if(bothChecked){
-                                            var val_b = JSON.parse('{{ classified_data_b|escapejs }}');
-                                            if(Ch_tChecked){
-                                                pltboth = per_plot(val_b, Ch_t, SG);
-                                            }else {
-                                                if (Ch_sttChecked) {
-                                                    pltboth = per_plot(val_b, Ch_stt, SG);
-                                                }
-                                            }
-                                        }
-                                        console.log("result:",pltboth.data," \n and:", pltboth.layout)
-                                        var combinedData = [];
-                                        if (pltright.data) combinedData = combinedData.concat(pltright.data);
-                                        if (pltleft.data) combinedData = combinedData.concat(pltleft.data);
-                                        if (pltboth.data) combinedData = combinedData.concat(pltboth.data);
-                                        var combinedLayout = pltright.layout || pltleft.layout || pltboth.layout;
-                                        console.log("x val:", combinedData)
-                                        if(graph==='graph2'){
-                                            Plotly.newPlot('area-chart', combinedData, combinedLayout);
-                                        }else{
-                                            Plotly.newPlot('bar-chart', combinedData, combinedLayout);
+                                function savePlotData(key, data, layout) {
+                                    // Clear existing data for the key
+                                    localStorage.removeItem(key + 'Data');
+                                    localStorage.removeItem(key + 'Layout');
+                                    
+                                    // Save new data
+                                    localStorage.setItem(key + 'Data', JSON.stringify(data));
+                                    localStorage.setItem(key + 'Layout', JSON.stringify(layout));
+                                }
+                                
+                                function loadPlotData(key) {
+                                    const data = localStorage.getItem(key + 'Data');
+                                    const layout = localStorage.getItem(key + 'Layout');
+                                    if (data && layout) {
+                                        try {
+                                            return {
+                                                data: JSON.parse(data),
+                                                layout: JSON.parse(layout)
+                                            };
+                                        } catch (e) {
+                                            console.error('Error parsing data or layout from localStorage', e);
+                                            return false;
                                         }
                                     }
+                                    return false;
+                                }
+                            
+                                window.onload = function() {
+                                    console.log("hi world");
+                                    var urlParams = new URLSearchParams(window.location.search);
+                                
+                                    // Extract values from the URL
+                                    var SG = urlParams.get("graph_type");
+                                
+                                    var areaParams = urlParams.getAll("area");
+                                    var leftChecked = areaParams.includes("left");
+                                    var rightChecked = areaParams.includes("right");
+                                    var bothChecked = areaParams.includes("both");
+                                    var graph = urlParams.get('graph');
+                                    var Ch_stt = document.getElementById("stt").value;
+                                    var Ch_t = document.getElementById("time").value;
+                                    var x_valParams = urlParams.getAll("x_val");
+                                    var Ch_sttChecked = x_valParams.includes("stt");
+                                    var Ch_tChecked = x_valParams.includes("time");
+                                
+                                    // Check area studied
+                                    var pltright = {data: null, layout: null};
+                                    var pltleft = {data: null, layout: null};
+                                    var pltboth = {data: null, layout: null};
+                                    if (rightChecked) {
+                                        var val_r = JSON.parse('{{ classified_data_r|escapejs }}');
+                                        if (Ch_tChecked)
+                                            pltright = per_plot(val_r, Ch_t, SG);
+                                        else if (Ch_sttChecked)
+                                            pltright = per_plot(val_r, Ch_stt, SG);
+                                    }
+                                    if (leftChecked) {
+                                        var val_l = JSON.parse('{{ classified_data_l|escapejs }}');
+                                        if (Ch_tChecked)
+                                            pltleft = per_plot(val_l, Ch_t, SG);
+                                        else if (Ch_sttChecked)
+                                            pltleft = per_plot(val_l, Ch_stt, SG);
+                                    }
+                                    if (bothChecked) {
+                                        var val_b = JSON.parse('{{ classified_data_b|escapejs }}');
+                                        if (Ch_tChecked)
+                                            pltboth = per_plot(val_b, Ch_t, SG);
+                                        else if (Ch_sttChecked)
+                                            pltboth = per_plot(val_b, Ch_stt, SG);
+                                    }
+                                
+                                    console.log("result:", pltboth.data, "\n and:", pltboth.layout);
+                                    var combinedData = [];
+                                    if (pltright.data) combinedData = combinedData.concat(pltright.data);
+                                    if (pltleft.data) combinedData = combinedData.concat(pltleft.data);
+                                    if (pltboth.data) combinedData = combinedData.concat(pltboth.data);
+                                    var combinedLayout = pltright.layout || pltleft.layout || pltboth.layout;
+                                    console.log("x val:", combinedData)
+                                
+                                    if (graph === 'graph2') {
+                                        var localdata=loadPlotData('barChart');
+                                        console.log("loadplot-data:",localdata.data,"\nloadplot-layout:",localdata.layout);
+                                        if (localdata) {
+                                            Plotly.newPlot('bar-chart', localdata.data, localdata.layout);
+                                        }
+                                        savePlotData('areaChart', combinedData, combinedLayout);
+                                        var localdata=loadPlotData('areaChart');
+                                        console.log("load recent saved plot-data:",localdata.data,"\nload recently saved plot-layout:",localdata.layout);
+                                        Plotly.newPlot('area-chart', combinedData, combinedLayout);
+                                        
+                                    } else {
+                                        var localdata=loadPlotData('areaChart');
+                                        console.log("loadplot-data:",localdata.data,"\nloadplot-layout:",localdata.layout);
+                                        if (localdata) {
+                                            Plotly.newPlot('area-chart', localdata.data, localdata.layout);
+                                        }
+                                        savePlotData('barChart', combinedData, combinedLayout);
+                                        var localdata=loadPlotData('barChart');
+                                        console.log("load recent saved plot-data:",localdata.data,"\nload recently saved plot-layout:",localdata.layout);
+                                        Plotly.newPlot('bar-chart', combinedData, combinedLayout);
+                                    }
+                                
+                                }
                                 </script>
                             </div>
                         </div>
@@ -211,8 +247,8 @@
                             <div id="area-chart">
                             </div>
                         </div>
-                        <div class="main-cards">
-                            <!--card 1-->
+                        <!--<div class="main-cards">
+                            <!-card 1->
                             <div class="card"> 
                                 <div class="card-inner">
                                     <h3>keyword search:</h3>
@@ -222,14 +258,14 @@
                                     </form>
                                 </div>
                             </div>
-                            <!--card 2-->
+                            <!-card 2->
                             <div class="card">
                                 <div class="card-inner">
                                     <h3>your word"":</h3>
                                     <h4>was found in <span id="result-count">0</span>reports</h4>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </main>
             </div>
@@ -280,7 +316,7 @@
                     labels: [typeValues[0], typeValues[1], typeValues[2], typeValues[3], typeValues[4], typeValues[5], typeValues[6]],
                     type: SG
                 }];
-                var layout = { title: 'plot1' };
+                var layout = { title: 'pie chart' };
                 return {data: data, layout: layout};
             }
             else{ 
@@ -336,7 +372,8 @@
                         var trace6 = { x: allYearsArray, y: type6, mode: 'lines+markers',type: 'scatter', name: typeValues[6] };
                     }
                     var data;
-                    data = [trace1, trace2, trace3, trace4, trace5];
+                    data = [trace0, trace1, trace2, trace3, trace4, trace5, trace6];
+                    var layout={ xaxis: {title: 'Time'} , yaxis: {title: 'count' } }
                     return {data: data, layout: layout};
                 }
                 else{
@@ -365,6 +402,7 @@
                 else{
                     var data = {x: val_x, y: val_y, mode: 'lines+markers',type: 'scatter'};
                 }
+                var layout={ xaxis: {title: 'types'} , yaxis: {title: 'count' } }
                 return {data: data, layout: layout};
 
             }
@@ -399,7 +437,7 @@
         }
 
     </script>
-    <script>
+    <!--<script>
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -444,6 +482,6 @@
                 }
             });
         });
-    </script>
+    </script>-->
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* Style for form fields */
+
 #user_form {
     margin: 20px;
     display: flex;
@@ -25,12 +25,12 @@ input[type="password"] {
     border-radius: 3px;
 }
 
-/* Style for form errors */
+
 .error {
     color: red;
 }
 
-/* Style for submit button */
+
 .submit-row {
     margin-top: 20px;
 }

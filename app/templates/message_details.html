@@ -11,45 +11,52 @@
 <body>
     <div class="wrapper">
         <div class="sidebar">
-            <h2><a href="{% url 'dashboard' %}">Radiology Report Platform</a></h2>
+            <h2><a href="{% url 'dashboard' %}"><img src="{% static 'logo_pfe_white.png' %}" class ="logo"></a></h2>
             <ul>
                 <li><a href="{% url 'reports' %}">Reports</a></li>
                 <li><a href="{% url 'patients' %}">Patients</a></li>
-                <li><a href="#">Statistics</a></li>
-                <li class="ispressed"><a href="{%url 'messages' %}">Message</a></li>
+                <li><a href="{%url 'statistics' %}">Statistics</a></li>
+                <li class="ispressed">Messages</li>
             </ul>
         </div>
         <div class="main_content">
             <div class="header">
                 <ul class="dir-link">
-                    <li><a href="{% url 'receive-message'}">Messages</a></li>
+                    <li><a href="{% url 'messages'%}">Message</a></li>
                     <li><a href="{% url 'profile' request.user.id %}"> {{ request.user.username }} (logged in!)</a><a href="{%url 'logout'%}">log out?</a></li>
                 </ul>
             </div>
             <div class="page">
                 <div class="box">
+                    <button><a href="{% url 'messages' %}">Return</a></button>
                     <div class="header-box">
                         <h1>Message Details</h1>
-                        <button><a href="{% url 'messages' %}">Return</a></button>
+
                     </div>
                     <div class="message-detail">
                         <div>
-                            <strong>From:</strong> {{ message.sender }}
+                            <strong>From:</strong> <p class="black">{{ message.sender }}</p>
                         </div>
                         <div>
-                            <strong>Subject:</strong> {{ message.subject }}
+                            <strong>Subject:</strong> <p class="black">{{ message.subject }}</p>
                         </div>
                         <div>
-                            <strong>Time:</strong> {{ message.timestamp }}
+                            <strong>Time:</strong> <p class="black">{{ message.timestamp }}</p>
                         </div>
                         {% if message.attachment %}
                         <div>
-                            <strong>Attachment:</strong> <a href="{{ message.attachment.url }}">Download</a>
+                            <strong>Attachment:</strong>
+                            {% if message.attachment.url|lower|endswith:'.jpg' or message.attachment.url|lower|endswith:'.jpeg' or message.attachment.url|lower|endswith:'.png' or message.attachment.url|lower|endswith:'.gif' %}
+                            <img src="{{ message.image.url }}" style="max-width: 200px; max-height: 200px;">
+                            {% else %}
+                            <a href="{{ message.image.url }}">Download</a>
+                            {% endif %}
                         </div>
                         {% endif %}
+
                         <div>
                             <strong>Content:</strong><br>
-                            {{ message.content }}
+                            <p class="black">{{ message.content }}</p>
                         </div>
                         <div class="buttons">
                             <button onclick="deleteMessage({{ message.id }})">Delete</button>
@@ -74,19 +81,16 @@
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 success: function(response) {
-                    // Remove the deleted message container from the DOM
                     $("#message_" + messageId).parent().remove();
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
-                    // Handle error if necessary
                 }
             });
         }
     }
 
     function replyMessage(senderUsername) {
-        // Redirect to the Send Message page with receiver field pre-filled
         var receiver = encodeURIComponent(senderUsername);
         window.location.href = "/send-message/?receiver=" + receiver;
     }

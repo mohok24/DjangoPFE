@@ -15,7 +15,7 @@
             <ul>
                 <li><a href="{% url 'reports' %}">Report</a></li>
                 <li class="ispressed">Patient</li>
-                <li><a href="#">Statistics</a></li>
+                <li><a href="{% url 'statistics' %}">Statistics</a></li>
                 <li><a href="{%url 'messages' %}">Message</a></li>
             </ul>
         </div>
@@ -61,7 +61,7 @@
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                 <script>
                     var typingTimer;
-                    var doneTypingInterval = 1000;
+                    var doneTypingInterval = 300;
                     var suggestedWordAdded = false;
                     $('div[contenteditable="true"]').on('input', function () {
                         clearTimeout(typingTimer);
@@ -129,7 +129,12 @@
                                 },
                                 url: 'predict',
                                 success: function (response) {
-                                    var suggestedWord = '<span id="suggestedWord" class="grayed-out"> ' + response.predicted_text + '</span>';
+                                    var suggestedWord;
+                                    if (response.predicted_text) {
+                                        suggestedWord = '<span id="suggestedWord" class="grayed-out"> ' + response.predicted_text + '</span>';
+                                    } else {
+                                        suggestedWord = ''; 
+                                    }
                                     $div.append(suggestedWord);
                                     suggestedWordAdded = false;
                                 },

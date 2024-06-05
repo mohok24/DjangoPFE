@@ -210,3 +210,18 @@ p {
 .dir-link li:first-child {
     padding-right: 50%;
 }
+.er {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+    .er:hover {
+        background-color: #0056b3;
+    }
